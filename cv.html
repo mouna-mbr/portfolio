@@ -1,0 +1,252 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mouna Ben Rebah - Portfolio</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            line-height: 1.6;
+            color: #2c3e50;
+            background: #f4f4f9;
+        }
+
+        header {
+            background: linear-gradient(135deg, #2c3e50, #34495e);
+            color: white;
+            text-align: center;
+            padding: 3rem 1rem;
+        }
+
+        header h1 {
+            font-size: 2.8rem;
+            margin-bottom: 0.5rem;
+        }
+
+        header p {
+            font-size: 1.2rem;
+            opacity: 0.9;
+        }
+
+        nav {
+            background: #34495e;
+            padding: 1rem;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        nav ul {
+            list-style: none;
+            display: flex;
+            justify-content: center;
+            gap: 2rem;
+        }
+
+        nav ul li a {
+            color: white;
+            text-decoration: none;
+            font-weight: 600;
+            transition: color 0.3s;
+        }
+
+        nav ul li a:hover {
+            color: #3498db;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+
+        section {
+            margin-bottom: 3rem;
+            background: white;
+            padding: 2rem;
+            border-radius: 8px;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+        }
+
+        h2 {
+            color: #2c3e50;
+            font-size: 2rem;
+            margin-bottom: 1rem;
+            border-bottom: 2px solid #3498db;
+            padding-bottom: 0.5rem;
+        }
+
+        .about p {
+            font-size: 1.1rem;
+            color: #555;
+        }
+
+        .projects-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+        }
+
+        .project-card {
+            background: #f9f9f9;
+            padding: 1.5rem;
+            border-radius: 8px;
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+
+        .project-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 6px 15px rgba(0,0,0,0.15);
+        }
+
+        .project-card h3 {
+            color: #2c3e50;
+            margin-bottom: 0.5rem;
+        }
+
+        .project-card p {
+            color: #666;
+            margin-bottom: 1rem;
+        }
+
+        .project-card a {
+            color: #3498db;
+            text-decoration: none;
+            font-weight: 600;
+        }
+
+        .project-card a:hover {
+            text-decoration: underline;
+        }
+
+        .experience-item {
+            margin-bottom: 1.5rem;
+        }
+
+        .experience-item h3 {
+            color: #2c3e50;
+            font-size: 1.4rem;
+        }
+
+        .experience-item p {
+            color: #666;
+        }
+
+        .cv a {
+            display: inline-block;
+            background: #3498db;
+            color: white;
+            padding: 0.8rem 1.5rem;
+            text-decoration: none;
+            border-radius: 5px;
+            font-weight: 600;
+            transition: background 0.3s;
+        }
+
+        .cv a:hover {
+            background: #2980b9;
+        }
+
+        footer {
+            background: #2c3e50;
+            color: white;
+            text-align: center;
+            padding: 1.5rem;
+        }
+
+        footer p {
+            font-size: 1rem;
+        }
+
+        @media (max-width: 768px) {
+            header h1 {
+                font-size: 2rem;
+            }
+
+            nav ul {
+                flex-direction: column;
+                gap: 1rem;
+            }
+
+            .container {
+                padding: 1rem;
+            }
+
+            section {
+                padding: 1.5rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>Mouna Ben Rebah</h1>
+        <p>Full-Stack Developer | TWIN Engineering Student</p>
+    </header>
+    <nav>
+        <ul>
+            <li><a href="#about">About</a></li>
+            <li><a href="#projects">Projects</a></li>
+            <li><a href="#experience">Experience</a></li>
+            <li><a href="#cv">CV</a></li>
+        </ul>
+    </nav>
+    <div class="container">
+        <section id="about" class="about">
+            <h2>About Me</h2>
+            <p>I'm a second-year engineering student specializing in Web and Internet Technologies (TWIN) at Esprit. With a background in IoT and a passion for full-stack development, I excel in building modern, responsive web applications using technologies like React.js, Angular, Spring Boot, and Node.js. My projects focus on innovative solutions, such as reducing food waste and automating CI/CD pipelines. I'm eager to tackle new challenges and contribute to impactful tech projects.</p>
+        </section>
+        <section id="projects" class="projects">
+            <h2>My Projects</h2>
+            <div class="projects-grid">
+                <div class="project-card">
+                    <h3>SustainaFood</h3>
+                    <p>A web platform connecting food donors with charities to reduce waste, featuring machine learning for donation recommendations and image analysis.</p>
+                    <p><strong>Tech:</strong> React.js, Node.js, MongoDB, Random Forest, Computer Vision</p>
+                    <a href="https://github.com/mounabenrebah/sustainafood" target="_blank">View on GitHub</a>
+                </div>
+                <div class="project-card">
+                    <h3>DevOps Pipeline</h3>
+                    <p>Designed a CI/CD pipeline for automated web app deployment, integrating code quality checks and real-time monitoring.</p>
+                    <p><strong>Tech:</strong> Jenkins, Docker, Kubernetes, SonarQube, Prometheus, Grafana</p>
+                    <a href="https://github.com/mounabenrebah/devops" target="_blank">View on GitHub</a>
+                </div>
+                <div class="project-card">
+                    <h3>Microservice App</h3>
+                    <p>Developed a scalable microservices-based application with independent services and cloud deployment.</p>
+                    <p><strong>Tech:</strong> Spring Boot, RabbitMQ, H2, PostgreSQL, AWS, Docker</p>
+                    <a href="https://github.com/mounabenrebah/microservice" target="_blank">View on GitHub</a>
+                </div>
+            </div>
+        </section>
+        <section id="experience" class="experience">
+            <h2>Professional Experience</h2>
+            <div class="experience-item">
+                <h3>Software Developer Intern (Summer) - Société Tunisienne de Banque</h3>
+                <p><em>Jul 2024 - Aug 2024, Tunis, Tunisia</em></p>
+                <p>Developed a system for bulk bank card assignment using .NET and Spring Boot backends, with a responsive Angular frontend. Integrated RESTful APIs and collaborated with cross-functional teams.</p>
+            </div>
+            <div class="experience-item">
+                <h3>Developer Intern (PFE) - BEE Coders</h3>
+                <p><em>Jan 2023 - Jun 2023, Tunis, Tunisia</em></p>
+                <p>Built a multi-profile platform connecting businesses, students, and coworking spaces using Spring Boot and Angular. Managed database design and API integration.</p>
+            </div>
+        </section>
+        <section id="cv" class="cv">
+            <h2>My CV</h2>
+            <p>Explore my skills, experience, and projects in detail by downloading my CV.</p>
+            <a href="C:\Users\ASUS\Desktop\MounaInfo\Mouna-Ben-Rebah-FlowCV-Resume-20250506.pdf" download>Download CV</a>
+        </section>
+    </div>
+    <footer>
+        <p>© 2025 Mouna Ben Rebah. All rights reserved.</p>
+    </footer>
+</body>
+</html>

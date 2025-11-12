@@ -4,61 +4,86 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Mouna Ben Rebah - Portfolio</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <style>
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
         }
 
         body {
-            line-height: 1.6;
+            font-family: 'Poppins', sans-serif;
+            line-height: 1.7;
             color: #2c3e50;
-            background: #f4f4f9;
+            background: #f8f9fa;
         }
 
         header {
-            background: linear-gradient(135deg, #2c3e50, #34495e);
+            background: linear-gradient(135deg, #1a2a44, #2c3e50);
             color: white;
             text-align: center;
-            padding: 3rem 1rem;
+            padding: 4rem 1rem;
+            position: relative;
+            overflow: hidden;
+        }
+
+        header::after {
+            content: '';
+            position: absolute;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
+            background: rgba(0,0,0,0.2);
+            z-index: 0;
+        }
+
+        header > * {
+            position: relative;
+            z-index: 1;
         }
 
         header h1 {
-            font-size: 2.8rem;
+            font-size: 3rem;
             margin-bottom: 0.5rem;
+            font-weight: 700;
         }
 
         header p {
-            font-size: 1.2rem;
-            opacity: 0.9;
+            font-size: 1.3rem;
+            opacity: 0.95;
+            font-weight: 300;
         }
 
         nav {
-            background: #34495e;
-            padding: 1rem;
+            background: #2c3e50;
+            padding: 1rem 0;
             position: sticky;
             top: 0;
             z-index: 100;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
         }
 
         nav ul {
             list-style: none;
             display: flex;
             justify-content: center;
-            gap: 2rem;
+            gap: 2.5rem;
+            flex-wrap: wrap;
         }
 
         nav ul li a {
-            color: white;
+            color: #ecf0f1;
             text-decoration: none;
-            font-weight: 600;
-            transition: color 0.3s;
+            font-weight: 500;
+            font-size: 1.05rem;
+            transition: all 0.3s ease;
+            padding: 0.5rem 1rem;
+            border-radius: 5px;
         }
 
         nav ul li a:hover {
-            color: #3498db;
+            background: #3498db;
+            color: white;
         }
 
         .container {
@@ -68,97 +93,213 @@
         }
 
         section {
-            margin-bottom: 3rem;
+            margin-bottom: 3.5rem;
             background: white;
-            padding: 2rem;
-            border-radius: 8px;
-            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+            padding: 2.5rem;
+            border-radius: 12px;
+            box-shadow: 0 6px 20px rgba(0,0,0,0.08);
+            transition: transform 0.3s ease;
+        }
+
+        section:hover {
+            transform: translateY(-5px);
         }
 
         h2 {
             color: #2c3e50;
-            font-size: 2rem;
-            margin-bottom: 1rem;
-            border-bottom: 2px solid #3498db;
-            padding-bottom: 0.5rem;
+            font-size: 2.1rem;
+            margin-bottom: 1.5rem;
+            position: relative;
+            padding-bottom: 0.7rem;
+        }
+
+        h2::after {
+            content: '';
+            position: absolute;
+            left: 0;
+            bottom: 0;
+            width: 60px;
+            height: 4px;
+            background: #3498db;
+            border-radius: 2px;
         }
 
         .about p {
             font-size: 1.1rem;
             color: #555;
+            text-align: justify;
         }
 
         .projects-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 2rem;
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            gap: 1.8rem;
         }
 
         .project-card {
-            background: #f9f9f9;
-            padding: 1.5rem;
-            border-radius: 8px;
-            transition: transform 0.3s, box-shadow 0.3s;
+            background: #f8f9fa;
+            border-radius: 10px;
+            overflow: hidden;
+            transition: all 0.3s ease;
+            border: 1px solid #e9ecef;
         }
 
         .project-card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 6px 15px rgba(0,0,0,0.15);
+            transform: translateY(-8px);
+            box-shadow: 0 12px 25px rgba(0,0,0,0.12);
+            border-color: #3498db;
         }
 
         .project-card h3 {
-            color: #2c3e50;
-            margin-bottom: 0.5rem;
+            background: #3498db;
+            color: white;
+            padding: 1rem;
+            margin: 0;
+            font-size: 1.3rem;
+        }
+
+        .project-card .content {
+            padding: 1.3rem;
         }
 
         .project-card p {
-            color: #666;
-            margin-bottom: 1rem;
+            color: #555;
+            margin-bottom: 0.8rem;
+            font-size: 0.95rem;
         }
 
-        .project-card a {
+        .tech-tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+            margin: 1rem 0;
+        }
+
+        .tech-tag {
+            background: #e3f2fd;
+            color: #1976d2;
+            font-size: 0.8rem;
+            padding: 0.3rem 0.7rem;
+            border-radius: 15px;
+            font-weight: 500;
+        }
+
+        .project-links {
+            display: flex;
+            gap: 1rem;
+            margin-top: 1rem;
+        }
+
+        .project-links a {
             color: #3498db;
             text-decoration: none;
             font-weight: 600;
+            font-size: 0.95rem;
+            display: flex;
+            align-items: center;
+            gap: 0.4rem;
         }
 
-        .project-card a:hover {
-            text-decoration: underline;
+        .project-links a:hover {
+            color: #2980b9;
         }
 
         .experience-item {
-            margin-bottom: 1.5rem;
+            margin-bottom: 2rem;
+            padding-bottom: 1.5rem;
+            border-bottom: 1px dashed #ddd;
+        }
+
+        .experience-item:last-child {
+            border-bottom: none;
+            padding-bottom: 0;
         }
 
         .experience-item h3 {
             color: #2c3e50;
-            font-size: 1.4rem;
+            font-size: 1.35rem;
+            margin-bottom: 0.3rem;
         }
 
-        .experience-item p {
-            color: #666;
+        .experience-item .company {
+            color: #3498db;
+            font-weight: 600;
+            font-size: 1.1rem;
+        }
+
+        .experience-item .date {
+            color: #7f8c8d;
+            font-size: 0.95rem;
+            margin-bottom: 0.8rem;
+        }
+
+        .experience-item ul {
+            margin-left: 1.5rem;
+            color: #555;
+        }
+
+        .experience-item ul li {
+            margin-bottom: 0.4rem;
+        }
+
+        .skills-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1.5rem;
+        }
+
+        .skill-category h4 {
+            color: #2c3e50;
+            margin-bottom: 0.8rem;
+            font-size: 1.2rem;
+            border-left: 4px solid #3498db;
+            padding-left: 0.8rem;
+        }
+
+        .skill-tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.6rem;
+        }
+
+        .skill-tag {
+            background: #eef5ff;
+            color: #2980b9;
+            padding: 0.4rem 0.9rem;
+            border-radius: 20px;
+            font-size: 0.9rem;
+            font-weight: 500;
+        }
+
+        .cv {
+            text-align: center;
         }
 
         .cv a {
             display: inline-block;
-            background: #3498db;
+            background: #27ae60;
             color: white;
-            padding: 0.8rem 1.5rem;
+            padding: 1rem 2rem;
             text-decoration: none;
-            border-radius: 5px;
+            border-radius: 50px;
             font-weight: 600;
-            transition: background 0.3s;
+            font-size: 1.1rem;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(39, 174, 96, 0.3);
         }
 
         .cv a:hover {
-            background: #2980b9;
+            background: #219653;
+            transform: translateY(-3px);
+            box-shadow: 0 6px 20px rgba(39, 174, 96, 0.4);
         }
 
         footer {
-            background: #2c3e50;
-            color: white;
+            background: #1a2a44;
+            color: #bdc3c7;
             text-align: center;
-            padding: 1.5rem;
+            padding: 2rem;
+            margin-top: 3rem;
         }
 
         footer p {
@@ -166,87 +307,290 @@
         }
 
         @media (max-width: 768px) {
-            header h1 {
-                font-size: 2rem;
-            }
-
-            nav ul {
-                flex-direction: column;
-                gap: 1rem;
-            }
-
-            .container {
-                padding: 1rem;
-            }
-
-            section {
-                padding: 1.5rem;
-            }
+            header h1 { font-size: 2.2rem; }
+            header p { font-size: 1.1rem; }
+            nav ul { flex-direction: column; gap: 1rem; }
+            .container { padding: 1rem; }
+            section { padding: 1.8rem; }
+            .projects-grid { grid-template-columns: 1fr; }
         }
     </style>
 </head>
 <body>
     <header>
         <h1>Mouna Ben Rebah</h1>
-        <p>Full-Stack Developer | TWIN Engineering Student</p>
+        <p>Étudiante en 3ème année Cycle Ingénieur TWIN | Full-Stack & Data Engineer</p>
     </header>
+
     <nav>
         <ul>
-            <li><a href="#about">About</a></li>
-            <li><a href="#projects">Projects</a></li>
-            <li><a href="#experience">Experience</a></li>
+            <li><a href="#about">À propos</a></li>
+            <li><a href="#projects">Projets</a></li>
+            <li><a href="#experience">Expérience</a></li>
+            <li><a href="#skills">Compétences</a></li>
             <li><a href="#cv">CV</a></li>
         </ul>
     </nav>
+
     <div class="container">
+
+        <!-- À propos -->
         <section id="about" class="about">
-            <h2>About Me</h2>
-            <p>I'm a second-year engineering student specializing in Web and Internet Technologies (TWIN) at Esprit. With a background in IoT and a passion for full-stack development, I excel in building modern, responsive web applications using technologies like React.js, Angular, Spring Boot, and Node.js. My projects focus on innovative solutions, such as reducing food waste and automating CI/CD pipelines. I'm eager to tackle new challenges and contribute to impactful tech projects.</p>
+            <h2>À propos de moi</h2>
+            <p>
+                Actuellement étudiante en <strong>troisième année du cycle d'ingénieur en informatique</strong>, spécialité <strong>TWIN (Technologies du Web et de l’Internet)</strong>, je suis passionnée par le développement full-stack, les technologies web, l’intelligence artificielle et l’innovation. Titulaire d’une licence en Internet des Objets (IoT), j’ai acquis des compétences solides en conception et développement d’applications modernes, en ingénierie des données massives et en architectures cloud. Motivé par les défis technologiques, je contribue activement à des projets à impact social et environnemental.
+            </p>
         </section>
-        <section id="projects" class="projects">
-            <h2>My Projects</h2>
+
+        <!-- Projets -->
+        <section id="projects">
+            <h2>Mes Projets</h2>
             <div class="projects-grid">
+
+                <!-- SustainaFood -->
                 <div class="project-card">
                     <h3>SustainaFood</h3>
-                    <p>A web platform connecting food donors with charities to reduce waste, featuring machine learning for donation recommendations and image analysis.</p>
-                    <p><strong>Tech:</strong> React.js, Node.js, MongoDB, Random Forest, Computer Vision</p>
-                    <a href="https://github.com/mouna-mbr/sustainafood" target="_blank">View on GitHub</a>
+                    <div class="content">
+                        <p>Plateforme web connectant donateurs et associations pour réduire le gaspillage alimentaire avec IA.</p>
+                        <div class="tech-tags">
+                            <span class="tech-tag">React.js</span>
+                            <span class="tech-tag">Node.js</span>
+                            <span class="tech-tag">MongoDB</span>
+                            <span class="tech-tag">Random Forest</span>
+                            <span class="tech-tag">Computer Vision</span>
+                        </div>
+                        <div class="project-links">
+                            <a href="https://github.com/mouna-mbr/sustainafood" target="_blank">GitHub</a>
+                        </div>
+                    </div>
                 </div>
+
+                <!-- MindLens (Django) -->
                 <div class="project-card">
-                    <h3>DevOps Pipeline</h3>
-                    <p>Designed a CI/CD pipeline for automated web app deployment, integrating code quality checks and real-time monitoring.</p>
-                    <p><strong>Tech:</strong> Jenkins, Docker, Kubernetes, SonarQube, Prometheus, Grafana</p>
-                    <a href="https://github.com/mouna-mbr/devops" target="_blank">View on GitHub</a>
+                    <h3>MindLens – AI Journaling App</h3>
+                    <div class="content">
+                        <p>Application de journaling multimodal (texte, audio, images) enrichie par IA pour le bien-être mental.</p>
+                        <div class="tech-tags">
+                            <span class="tech-tag">Django</span>
+                            <span class="tech-tag">PostgreSQL</span>
+                            <span class="tech-tag">HuggingFace</span>
+                            <span class="tech-tag">Whisper</span>
+                            <span class="tech-tag">Vision AI</span>
+                        </div>
+                        <div class="project-links">
+                            <a href="https://github.com/SheCodes-esprit/MindLens" target="_blank">GitHub</a>
+                        </div>
+                    </div>
                 </div>
+
+                <!-- Waste-2-Product (Laravel) -->
                 <div class="project-card">
-                    <h3>Microservice App</h3>
-                    <p>Developed a scalable microservices-based application with independent services and cloud deployment.</p>
-                    <p><strong>Tech:</strong> Spring Boot, RabbitMQ, H2, PostgreSQL, AWS, Docker</p>
-                    <a href="https://github.com/mouna-mbr/microservice" target="_blank">View on GitHub</a>
+                    <h3>Waste-2-Product</h3>
+                    <div class="content">
+                        <p>Plateforme de transformation des déchets en produits valorisables (économie circulaire).</p>
+                        <div class="tech-tags">
+                            <span class="tech-tag">Laravel</span>
+                            <span class="tech-tag">MySQL</span>
+                            <span class="tech-tag">PHP</span>
+                            <span class="tech-tag">API REST</span>
+                        </div>
+                        <div class="project-links">
+                            <a href="https://github.com/SheCodes-Projects-Esprit/Waste-2-Product" target="_blank">GitHub</a>
+                        </div>
+                    </div>
                 </div>
+
+                <!-- SemantikVoyage (Django + Ontologie) -->
+                <div class="project-card">
+                    <h3>SemantikVoyage</h3>
+                    <div class="content">
+                        <p>API de voyage intelligent basée sur une ontologie sémantique et IA (Fesuki, Django).</p>
+                        <div class="tech-tags">
+                            <span class="tech-tag">Django</span>
+                            <span class="tech-tag">RDF/OWL</span>
+                            <span class="tech-tag">SPARQL</span>
+                            <span class="tech-tag">Fesuki</span>
+                            <span class="tech-tag">Web Sémantique</span>
+                        </div>
+                        <div class="project-links">
+                            <a href="https://github.com/SheCodes-Projects-Esprit/SemantikVoyage-ontology-django" target="_blank">GitHub</a>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- DevOps Pipeline -->
+                <div class="project-card">
+                    <h3>Pipeline CI/CD Automatisé</h3>
+                    <div class="content">
+                        <p>Pipeline complet avec conteneurisation, tests, qualité et monitoring en temps réel.</p>
+                        <div class="tech-tags">
+                            <span class="tech-tag">Jenkins</span>
+                            <span class="tech-tag">Docker</span>
+                            <span class="tech-tag">Kubernetes</span>
+                            <span class="tech-tag">Prometheus</span>
+                            <span class="tech-tag">Grafana</span>
+                        </div>
+                        <div class="project-links">
+                            <a href="https://github.com/mouna-mbr/devops" target="_blank">GitHub</a>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Microservices -->
+                <div class="project-card">
+                    <h3>Architecture Microservices</h3>
+                    <div class="content">
+                        <p>Application scalable avec services indépendants, messagerie et déploiement cloud.</p>
+                        <div class="tech-tags">
+                            <span class="tech-tag">Spring Boot</span>
+                            <span class="tech-tag">RabbitMQ</span>
+                            <span class="tech-tag">PostgreSQL</span>
+                            <span class="tech-tag">AWS</span>
+                        </div>
+                        <div class="project-links">
+                            <a href="https://github.com/mouna-mbr/microservice" target="_blank">GitHub</a>
+                        </div>
+                    </div>
+                </div>
+
             </div>
         </section>
-        <section id="experience" class="experience">
-            <h2>Professional Experience</h2>
+
+        <!-- Expérience -->
+        <section id="experience">
+            <h2>Expérience Professionnelle</h2>
+
             <div class="experience-item">
-                <h3>Software Developer Intern (Summer) - Société Tunisienne de Banque</h3>
-                <p><em>Jul 2024 - Aug 2024, Tunis, Tunisia</em></p>
-                <p>Developed a system for bulk bank card assignment using .NET and Spring Boot backends, with a responsive Angular frontend. Integrated RESTful APIs and collaborated with cross-functional teams.</p>
+                <h3>Stagiaire Data Engineering</h3>
+                <div class="company">Sofrecom Tunisie (Groupe Orange)</div>
+                <div class="date">Juillet 2025 – Août 2025</div>
+                <ul>
+                    <li>Développement d’une librairie réutilisable pour l’orchestration de données massives avec <strong>Apache Airflow</strong> et <strong>Starburst/Trino</strong></li>
+                    <li>Automatisation de workflows entre S3 On-Premise et GCP → <strong>réduction de 85% du temps de transfert</strong></li>
+                    <li>Implémentation de gouvernance RGPD via <code>dataguardian-lib</code></li>
+                    <li>Déploiement microservices : Python CLI, API Collibra, Docker, CI/CD</li>
+                </ul>
             </div>
+
             <div class="experience-item">
-                <h3>Developer Intern (PFE) - BEE Coders</h3>
-                <p><em>Jan 2023 - Jun 2023, Tunis, Tunisia</em></p>
-                <p>Built a multi-profile platform connecting businesses, students, and coworking spaces using Spring Boot and Angular. Managed database design and API integration.</p>
+                <h3>Développeuse .NET/Angular</h3>
+                <div class="company">Société Tunisienne de Banque (STB)</div>
+                <div class="date">Juillet 2024 – Août 2024</div>
+                <ul>
+                    <li>Système d’affectation en masse des cartes bancaires</li>
+                    <li>Backends : <strong>Spring Boot</strong> + <strong>.NET</strong></li>
+                    <li>Frontend réactif avec <strong>Angular</strong></li>
+                    <li>API RESTful, documentation technique</li>
+                </ul>
+            </div>
+
+            <div class="experience-item">
+                <h3>Développeuse Full-Stack (PFE)</h3>
+                <div class="company">BEE Coders</div>
+                <div class="date">Janvier 2023 – Juin 2023</div>
+                <ul>
+                    <li>Plateforme multiprofiles (entreprises, étudiants, coworking)</li>
+                    <li><strong>Spring Boot</strong> + <strong>Angular</strong> + base de données</li>
+                    <li>API RESTful, collaboration interdisciplinaire</li>
+                </ul>
+            </div>
+
+        </section>
+
+        <!-- Compétences -->
+        <section id="skills">
+            <h2>Compétences Techniques</h2>
+            <div class="skills-grid">
+
+                <div class="skill-category">
+                    <h4>Langages</h4>
+                    <div class="skill-tags">
+                        <span class="skill-tag">Java</span>
+                        <span class="skill-tag">Python</span>
+                        <span class="skill-tag">JavaScript</span>
+                        <span class="skill-tag">TypeScript</span>
+                        <span class="skill-tag">C/C++</span>
+                        <span class="skill-tag">PHP</span>
+                    </div>
+                </div>
+
+                <div class="skill-category">
+                    <h4>Frameworks</h4>
+                    <div class="skill-tags">
+                        <span class="skill-tag">Spring Boot</span>
+                        <span class="skill-tag">Angular</span>
+                        <span class="skill-tag">React.js</span>
+                        <span class="skill-tag">Node.js</span>
+                        <span class="skill-tag">Django</span>
+                        <span class="skill-tag">Laravel</span>
+                        <span class="skill-tag">.NET</span>
+                        <span class="skill-tag">Symfony</span>
+                    </div>
+                </div>
+
+                <div class="skill-category">
+                    <h4>DevOps & Cloud</h4>
+                    <div class="skill-tags">
+                        <span class="skill-tag">Docker</span>
+                        <span class="skill-tag">Kubernetes</span>
+                        <span class="skill-tag">Jenkins</span>
+                        <span class="skill-tag">Airflow</span>
+                        <span class="skill-tag">Prometheus</span>
+                        <span class="skill-tag">Grafana</span>
+                        <span class="skill-tag">AWS</span>
+                        <span class="skill-tag">GCP</span>
+                    </div>
+                </div>
+
+                <div class="skill-category">
+                    <h4>IA & Data</h4>
+                    <div class="skill-tags">
+                        <span class="skill-tag">Machine Learning</span>
+                        <span class="skill-tag">Random Forest</span>
+                        <span class="skill-tag">Computer Vision</span>
+                        <span class="skill-tag">NLP</span>
+                        <span class="skill-tag">HuggingFace</span>
+                        <span class="skill-tag">Whisper</span>
+                    </div>
+                </div>
+
+                <div class="skill-category">
+                    <h4>Bases de Données</h4>
+                    <div class="skill-tags">
+                        <span class="skill-tag">PostgreSQL</span>
+                        <span class="skill-tag">MongoDB</span>
+                        <span class="skill-tag">MySQL</span>
+                        <span class="skill-tag">H2</span>
+                        <span class="skill-tag">Hive</span>
+                    </div>
+                </div>
+
+                <div class="skill-category">
+                    <h4>Autres</h4>
+                    <div class="skill-tags">
+                        <span class="skill-tag">Web Sémantique</span>
+                        <span class="skill-tag">Ontologies</span>
+                        <span class="skill-tag">SPARQL</span>
+                        <span class="skill-tag">RGPD</span>
+                        <span class="skill-tag">Microservices</span>
+                    </div>
+                </div>
+
             </div>
         </section>
+
+        <!-- CV -->
         <section id="cv" class="cv">
-            <h2>My CV</h2>
-            <p>Explore my skills, experience, and projects in detail by downloading my CV.</p>
-            <a href="Mouna-Ben-Rebah-FlowCV-Resume-20250506.pdf" download>Download CV</a>
+            <h2>Mon CV Complet</h2>
+            <p>Découvrez mon parcours détaillé, mes projets académiques et mes certifications.</p>
+            <a href="Mouna-Ben-Rebah-FlowCV-Resume-TN.pdf" download>Télécharger mon CV (PDF)</a>
         </section>
+
     </div>
+
     <footer>
-        <p>© 2025 Mouna Ben Rebah. All rights reserved.</p>
+        <p>© 2025 Mouna Ben Rebah. Tous droits réservés.</p>
+        <p>mouna1ben1rebah@gmail.com | +216 55 447 395</p>
     </footer>
 </body>
 </html>

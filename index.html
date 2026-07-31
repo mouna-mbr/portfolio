@@ -1,386 +1,684 @@
 <!DOCTYPE html>
 <html lang="fr">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Mouna Ben Rebah - Portfolio</title>
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-    <style>
-        * { margin: 0; padding: 0; box-sizing: border-box; }
-        body { font-family: 'Poppins', sans-serif; line-height: 1.7; color: #2c3e50; background: #f8f9fa; }
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Mouna Ben Rebah — Développeuse Full-Stack</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#FBFBF9;
+    --surface:#FFFFFF;
+    --ink:#12151C;
+    --muted:#68707E;
+    --border:#E7E9EE;
+    --indigo:#4F46E5;
+    --indigo-light:#EEF0FE;
+    --green:#0EA875;
+    --green-light:#E7F8F1;
+    --amber:#F5A524;
+    --amber-light:#FDF3E0;
+    --radius:14px;
+    --shadow: 0 1px 2px rgba(18,21,28,0.04), 0 8px 24px rgba(18,21,28,0.05);
+    --code-bg:#12151F;
+    --code-line:#1B2030;
+  }
+  *{margin:0;padding:0;box-sizing:border-box;}
+  html{scroll-behavior:smooth;}
+  body{
+    font-family:'Inter',sans-serif;
+    background:var(--bg);
+    color:var(--ink);
+    line-height:1.65;
+    -webkit-font-smoothing:antialiased;
+  }
+  h1,h2,h3{font-family:'Space Grotesk',sans-serif;}
+  .mono{font-family:'JetBrains Mono',monospace;}
+  a{color:inherit;}
 
-        header {
-            background: linear-gradient(135deg, #1a2a44, #2c3e50);
-            color: white; text-align: center; padding: 4rem 1rem;
-            position: relative; overflow: hidden;
-        }
-        header::after { content:''; position:absolute; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.2); z-index:0; }
-        header > * { position: relative; z-index: 1; }
-        header h1 { font-size: 3rem; margin-bottom: 0.5rem; font-weight: 700; }
-        header p { font-size: 1.3rem; opacity: 0.95; font-weight: 300; }
+  a:focus-visible, button:focus-visible{outline:2px solid var(--indigo); outline-offset:3px; border-radius:4px;}
 
-        nav { background: #2c3e50; padding: 1rem 0; position: sticky; top: 0; z-index: 100; box-shadow: 0 2px 10px rgba(0,0,0,0.1); }
-        nav ul { list-style: none; display: flex; justify-content: center; gap: 2.5rem; flex-wrap: wrap; }
-        nav ul li a { color: #ecf0f1; text-decoration: none; font-weight: 500; font-size: 1.05rem; transition: all 0.3s ease; padding: 0.5rem 1rem; border-radius: 5px; }
-        nav ul li a:hover { background: #3498db; color: white; }
+  @media (prefers-reduced-motion: reduce){
+    *{animation:none !important; transition:none !important;}
+  }
 
-        .container { max-width: 1200px; margin: 0 auto; padding: 2rem; }
+  /* ---------- Nav ---------- */
+  nav{
+    position:sticky; top:0; z-index:100;
+    background:rgba(251,251,249,0.85);
+    backdrop-filter:blur(10px);
+    border-bottom:1px solid var(--border);
+  }
+  .nav-inner{
+    max-width:1120px; margin:0 auto; padding:1rem 1.5rem;
+    display:flex; align-items:center; justify-content:space-between;
+  }
+  .logo{
+    font-family:'JetBrains Mono',monospace; font-weight:700; font-size:1rem;
+    display:flex; align-items:center; gap:0.15rem;
+  }
+  .logo .b{color:var(--indigo);}
+  nav ul{list-style:none; display:flex; gap:0.5rem; flex-wrap:wrap;}
+  nav ul li a{
+    text-decoration:none; color:var(--muted); font-weight:500; font-size:0.92rem;
+    padding:0.5rem 0.9rem; border-radius:8px; transition:all .2s ease;
+    font-family:'JetBrains Mono',monospace;
+  }
+  nav ul li a:hover{background:var(--indigo-light); color:var(--indigo);}
 
-        section { margin-bottom: 3.5rem; background: white; padding: 2.5rem; border-radius: 12px; box-shadow: 0 6px 20px rgba(0,0,0,0.08); transition: transform 0.3s ease; }
-        section:hover { transform: translateY(-5px); }
+  .container{max-width:1120px; margin:0 auto; padding:0 1.5rem;}
 
-        h2 { color: #2c3e50; font-size: 2.1rem; margin-bottom: 1.5rem; position: relative; padding-bottom: 0.7rem; }
-        h2::after { content: ''; position: absolute; left: 0; bottom: 0; width: 60px; height: 4px; background: #3498db; border-radius: 2px; }
+  /* ---------- Hero ---------- */
+  .hero{padding:5rem 0 4rem;}
+  .hero-grid{display:grid; grid-template-columns:1.1fr 1fr; gap:3rem; align-items:center;}
+  .status-badge{
+    display:inline-flex; align-items:center; gap:0.5rem;
+    background:var(--green-light); color:var(--green);
+    font-family:'JetBrains Mono',monospace; font-size:0.8rem; font-weight:600;
+    padding:0.4rem 0.9rem; border-radius:100px; margin-bottom:1.5rem;
+  }
+  .status-dot{width:8px; height:8px; border-radius:50%; background:var(--green); animation:pulse 2s infinite;}
+  @keyframes pulse{ 0%,100%{opacity:1;} 50%{opacity:0.4;} }
+  .hero h1{
+    font-size:clamp(2.2rem, 4.5vw, 3.2rem);
+    font-weight:700; line-height:1.15; letter-spacing:-0.02em;
+    margin-bottom:1rem;
+  }
+  .hero h1 .accent{color:var(--indigo);}
+  .hero p.subtitle{font-size:1.15rem; color:var(--muted); max-width:46ch; margin-bottom:2rem;}
+  .hero-cta{display:flex; gap:0.9rem; flex-wrap:wrap;}
+  .btn{
+    display:inline-flex; align-items:center; gap:0.5rem;
+    padding:0.85rem 1.5rem; border-radius:10px; font-weight:600; font-size:0.95rem;
+    text-decoration:none; transition:all .2s ease; border:1px solid transparent; cursor:pointer;
+    font-family:'Inter',sans-serif;
+  }
+  .btn-primary{background:var(--ink); color:#fff;}
+  .btn-primary:hover{background:var(--indigo); transform:translateY(-2px);}
+  .btn-secondary{background:var(--surface); color:var(--ink); border:1px solid var(--border);}
+  .btn-secondary:hover{border-color:var(--indigo); color:var(--indigo); transform:translateY(-2px);}
 
-        .about p { font-size: 1.1rem; color: #555; text-align: justify; }
+  /* terminal window */
+  .terminal{
+    background:#14171F; border-radius:var(--radius); overflow:hidden;
+    box-shadow:var(--shadow); border:1px solid #23273a;
+  }
+  .terminal-bar{
+    display:flex; align-items:center; gap:0.4rem;
+    padding:0.75rem 1rem; background:#1B1F2C; border-bottom:1px solid #262b3d;
+  }
+  .terminal-dot{width:10px; height:10px; border-radius:50%;}
+  .terminal-filename{padding:0; margin-left:0.6rem; font-size:0.8rem; font-family:'JetBrains Mono',monospace; color:#7C8AAE;}
+  .terminal-body{padding:1.4rem 1.5rem; font-family:'JetBrains Mono',monospace; font-size:0.88rem; color:#C7D0E0;}
+  .terminal-body .line{margin-bottom:0.65rem;}
+  .terminal-body .prompt{color:var(--green);}
+  .terminal-body .path{color:#7C8AAE;}
+  .terminal-body .comment{color:#5C6584;}
+  .terminal-body .out{color:#E7ECF7;}
+  .terminal-body .key{color:#F5A524;}
+  .terminal-body .val{color:#9AE6B4;}
+  .cursor{display:inline-block; width:7px; height:1rem; background:var(--green); vertical-align:middle; animation:blink 1s step-end infinite;}
+  @keyframes blink{50%{opacity:0;}}
 
-        .projects-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 1.8rem; }
+  /* ---------- Section shell ---------- */
+  section.block{padding:3.5rem 0;}
+  .eyebrow{
+    font-family:'JetBrains Mono',monospace; font-size:0.85rem; color:var(--indigo);
+    margin-bottom:0.6rem; display:block;
+  }
+  .eyebrow::before{content:'// ';}
+  h2.title{font-size:1.9rem; font-weight:700; margin-bottom:2rem; letter-spacing:-0.01em;}
 
-        .project-card { background: #f8f9fa; border-radius: 10px; overflow: hidden; transition: all 0.3s ease; border: 1px solid #e9ecef; }
-        .project-card:hover { transform: translateY(-8px); box-shadow: 0 12px 25px rgba(0,0,0,0.12); border-color: #3498db; }
-        .project-card h3 { background: #3498db; color: white; padding: 1rem; margin: 0; font-size: 1.1rem; display: flex; align-items: center; gap: 0.5rem; }
-        .project-card h3 .badge { font-size: 0.62rem; background: rgba(255,255,255,0.2); border: 1px solid rgba(255,255,255,0.35); border-radius: 100px; padding: 2px 8px; font-weight: 600; letter-spacing: 0.06em; white-space: nowrap; }
-        .project-card .content { padding: 1.3rem; }
-        .project-card p { color: #555; margin-bottom: 0.8rem; font-size: 0.95rem; }
+  /* ---------- About : code editor ---------- */
+  .about-grid{display:grid; grid-template-columns:0.85fr 1.3fr; gap:2rem; align-items:start;}
+  .about-card{
+    background:var(--surface); border:1px solid var(--border); border-radius:var(--radius);
+    padding:1.6rem; box-shadow:var(--shadow);
+  }
+  .about-card .row{display:flex; justify-content:space-between; padding:0.55rem 0; border-bottom:1px dashed var(--border); font-size:0.92rem; gap:1rem;}
+  .about-card .row:last-child{border-bottom:none;}
+  .about-card .row span:first-child{color:var(--muted);}
+  .about-card .row span:last-child{font-weight:600; text-align:right;}
 
-        .tech-tags { display: flex; flex-wrap: wrap; gap: 0.5rem; margin: 1rem 0; }
-        .tech-tag { background: #e3f2fd; color: #1976d2; font-size: 0.8rem; padding: 0.3rem 0.7rem; border-radius: 15px; font-weight: 500; }
+  .code-editor{
+    background:var(--code-bg); border-radius:var(--radius); overflow:hidden;
+    box-shadow:var(--shadow); border:1px solid #23273a;
+  }
+  .code-tabs{display:flex; background:#1B1F2C; border-bottom:1px solid #262b3d;}
+  .code-tab{
+    padding:0.7rem 1.1rem; font-family:'JetBrains Mono',monospace; font-size:0.78rem;
+    color:#7C8AAE; border-right:1px solid #262b3d;
+  }
+  .code-tab.active{color:#E7ECF7; background:var(--code-bg); border-top:2px solid var(--indigo);}
+  .code-content{display:flex; padding:1.3rem 0;}
+  .line-numbers{
+    font-family:'JetBrains Mono',monospace; font-size:0.85rem; color:#3D4460;
+    padding:0 1rem; text-align:right; user-select:none; line-height:1.85;
+  }
+  .code-lines{font-family:'JetBrains Mono',monospace; font-size:0.85rem; line-height:1.85; padding-right:1.3rem; overflow-x:auto;}
+  .code-lines .kw{color:#C792EA;}
+  .code-lines .cls{color:#82AAFF;}
+  .code-lines .str{color:#9AE6B4;}
+  .code-lines .prop{color:#7C8AAE;}
+  .code-lines .fn{color:#82AAFF;}
+  .code-lines .cm{color:#5C6584; font-style:italic;}
+  .code-lines .punc{color:#89DDFF;}
+  .code-lines .num{color:#F78C6C;}
 
-        .project-links { display: flex; gap: 1rem; margin-top: 1rem; }
-        .project-links a { color: #3498db; text-decoration: none; font-weight: 600; font-size: 0.95rem; }
-        .project-links a:hover { color: #2980b9; }
+  /* ---------- Projects ---------- */
+  .projects-grid{display:grid; grid-template-columns:repeat(auto-fit, minmax(310px,1fr)); gap:1.4rem;}
+  .project-card{
+    background:var(--surface); border:1px solid var(--border); border-radius:var(--radius);
+    overflow:hidden; transition:all .25s ease; box-shadow:var(--shadow);
+    display:flex; flex-direction:column;
+  }
+  .project-card:hover{transform:translateY(-4px); border-color:var(--indigo);}
+  .project-top{
+    display:flex; align-items:center; gap:0.4rem; padding:0.7rem 1rem;
+    background:#F4F5F8; border-bottom:1px solid var(--border);
+  }
+  .dot{width:9px; height:9px; border-radius:50%;}
+  .dot.r{background:#F16065;} .dot.y{background:#F5B942;} .dot.g{background:#3EC873;}
+  .project-name{margin-left:0.5rem; font-family:'JetBrains Mono',monospace; font-size:0.8rem; color:var(--muted);}
+  .project-content{padding:1.3rem; display:flex; flex-direction:column; flex:1;}
+  .project-content h3{font-size:1.15rem; margin-bottom:0.5rem; display:flex; align-items:center; gap:0.5rem; flex-wrap:wrap;}
+  .badge{
+    font-family:'JetBrains Mono',monospace; font-size:0.65rem; font-weight:600;
+    background:var(--indigo-light); color:var(--indigo); padding:0.2rem 0.6rem; border-radius:100px;
+  }
+  .badge.private{background:var(--amber-light); color:#8A5A00;}
+  .project-content p{color:var(--muted); font-size:0.93rem; margin-bottom:1rem;}
+  .tech-tags{display:flex; flex-wrap:wrap; gap:0.4rem; margin-bottom:1.1rem;}
+  .tech-tag{
+    background:var(--bg); border:1px solid var(--border); color:#3A4150;
+    font-size:0.75rem; font-family:'JetBrains Mono',monospace; padding:0.25rem 0.6rem; border-radius:6px;
+  }
+  .project-links{margin-top:auto; background:#F4F5F8; margin:1rem -1.3rem -1.3rem; padding:0.8rem 1.3rem; border-top:1px solid var(--border);}
+  .project-links a{
+    display:inline-flex; align-items:center; gap:0.4rem; font-weight:600; font-size:0.85rem;
+    color:var(--indigo); text-decoration:none; font-family:'JetBrains Mono',monospace;
+  }
+  .project-links a:hover{text-decoration:underline;}
+  .project-links a::before{content:'$ git clone ';color:var(--muted); font-weight:400;}
+  .project-links .private-note{
+    display:flex; align-items:center; gap:0.5rem; font-size:0.85rem;
+    color:var(--muted); font-family:'JetBrains Mono',monospace;
+  }
+  .project-links .private-note::before{content:'🔒';}
 
-        .experience-item { margin-bottom: 2rem; padding-bottom: 1.5rem; border-bottom: 1px dashed #ddd; }
-        .experience-item:last-child { border-bottom: none; padding-bottom: 0; }
-        .experience-item h3 { color: #2c3e50; font-size: 1.35rem; margin-bottom: 0.3rem; }
-        .experience-item .company { color: #3498db; font-weight: 600; font-size: 1.1rem; }
-        .experience-item .date { color: #7f8c8d; font-size: 0.95rem; margin-bottom: 0.8rem; }
-        .experience-item ul { margin-left: 1.5rem; color: #555; }
-        .experience-item ul li { margin-bottom: 0.4rem; }
-        .stack-line { margin-top: 0.7rem; background: #eef5ff; border-left: 3px solid #3498db; padding: 0.45rem 0.8rem; border-radius: 0 6px 6px 0; font-size: 0.85rem; color: #1a3a6e; font-weight: 500; }
+  /* ---------- Experience : git log style ---------- */
+  .timeline{position:relative; padding-left:2.2rem;}
+  .timeline::before{content:''; position:absolute; left:5px; top:6px; bottom:6px; width:2px; background:var(--border);}
+  .timeline-item{position:relative; margin-bottom:2.4rem;}
+  .timeline-item:last-child{margin-bottom:0;}
+  .timeline-item::before{
+    content:''; position:absolute; left:-2.2rem; top:5px; width:12px; height:12px; border-radius:50%;
+    background:var(--surface); border:3px solid var(--indigo);
+  }
+  .commit-hash{
+    font-family:'JetBrains Mono',monospace; font-size:0.78rem; color:var(--amber);
+    background:var(--amber-light); padding:0.15rem 0.5rem; border-radius:6px; margin-right:0.5rem;
+  }
+  .timeline-item h3{font-size:1.2rem; margin-bottom:0.2rem; display:inline;}
+  .timeline-item .company{color:var(--indigo); font-weight:600; font-size:1rem; margin-top:0.4rem; display:block;}
+  .timeline-item .date{
+    font-family:'JetBrains Mono',monospace; color:var(--muted); font-size:0.82rem; margin:0.3rem 0 0.9rem;
+  }
+  .timeline-item ul{margin-left:1.2rem; color:#3A4150; font-size:0.95rem;}
+  .timeline-item ul li{margin-bottom:0.4rem;}
+  .timeline-item ul li::marker{color:var(--indigo);}
+  .stack-line{
+    margin-top:0.9rem; background:var(--green-light); border-left:3px solid var(--green);
+    padding:0.5rem 0.9rem; border-radius:0 8px 8px 0; font-size:0.82rem; color:#0A6B4E;
+    font-family:'JetBrains Mono',monospace;
+  }
 
-        .skills-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 1.5rem; }
-        .skill-category h4 { color: #2c3e50; margin-bottom: 0.8rem; font-size: 1.2rem; border-left: 4px solid #3498db; padding-left: 0.8rem; }
-        .skill-tags { display: flex; flex-wrap: wrap; gap: 0.6rem; }
-        .skill-tag { background: #eef5ff; color: #2980b9; padding: 0.4rem 0.9rem; border-radius: 20px; font-size: 0.9rem; font-weight: 500; }
+  /* ---------- Skills ---------- */
+  .skills-grid{display:grid; grid-template-columns:repeat(auto-fit, minmax(240px,1fr)); gap:1.5rem;}
+  .skill-category{
+    background:var(--surface); border:1px solid var(--border); border-radius:var(--radius);
+    padding:1.3rem; box-shadow:var(--shadow);
+  }
+  .skill-category h4{
+    font-family:'JetBrains Mono',monospace; font-size:0.85rem; color:var(--ink);
+    margin-bottom:0.9rem;
+  }
+  .skill-category h4::before{content:'> ';color:var(--indigo);}
+  .skill-tags{display:flex; flex-wrap:wrap; gap:0.5rem;}
+  .skill-tag{
+    background:var(--indigo-light); color:var(--indigo); padding:0.35rem 0.8rem;
+    border-radius:8px; font-size:0.85rem; font-weight:500;
+  }
 
-        .cv { text-align: center; }
-        .cv a { display: inline-block; background: #27ae60; color: white; padding: 1rem 2rem; text-decoration: none; border-radius: 50px; font-weight: 600; font-size: 1.1rem; transition: all 0.3s ease; box-shadow: 0 4px 15px rgba(39,174,96,0.3); }
-        .cv a:hover { background: #219653; transform: translateY(-3px); }
+  /* ---------- CV ---------- */
+  .cv-box{
+    background:linear-gradient(135deg, var(--ink), #232842);
+    border-radius:var(--radius); padding:3rem 2rem; text-align:center; color:#fff;
+    position:relative; overflow:hidden;
+  }
+  .cv-box::before{
+    content:'{ }'; position:absolute; font-family:'JetBrains Mono',monospace; font-size:9rem;
+    color:rgba(255,255,255,0.03); top:-2rem; right:-1rem; font-weight:700;
+  }
+  .cv-box h2{color:#fff; margin-bottom:0.6rem; position:relative;}
+  .cv-box p{color:#B7BEDA; margin-bottom:1.8rem; position:relative;}
+  .cv-box .btn-primary{background:var(--green); position:relative;}
+  .cv-box .btn-primary:hover{background:#0C9868;}
 
-        footer { background: #1a2a44; color: #bdc3c7; text-align: center; padding: 2rem; margin-top: 3rem; }
-        footer p { font-size: 1rem; }
+  /* ---------- Footer ---------- */
+  footer{
+    border-top:1px solid var(--border); padding:2.5rem 0; margin-top:2rem;
+    text-align:center; color:var(--muted); font-size:0.9rem;
+  }
+  footer .mono{color:var(--ink);}
 
-        @media (max-width: 768px) {
-            header h1 { font-size: 2.2rem; }
-            nav ul { flex-direction: column; gap: 1rem; }
-            .container { padding: 1rem; }
-            .projects-grid { grid-template-columns: 1fr; }
-        }
-    </style>
+  /* ---------- CV Modal ---------- */
+  .modal-overlay{
+    position:fixed; inset:0; background:rgba(12,14,20,0.6); backdrop-filter:blur(4px);
+    display:flex; align-items:center; justify-content:center; z-index:1000;
+    opacity:0; pointer-events:none; transition:opacity .25s ease;
+    padding:1.5rem;
+  }
+  .modal-overlay.open{opacity:1; pointer-events:auto;}
+  .modal-panel{
+    background:#14171F; border-radius:16px; width:100%; max-width:560px;
+    border:1px solid #262b3d; box-shadow:0 30px 80px rgba(0,0,0,0.45);
+    transform:scale(0.9) translateY(20px); opacity:0; transition:all .3s cubic-bezier(.2,.9,.3,1.2);
+    overflow:hidden;
+  }
+  .modal-overlay.open .modal-panel{transform:scale(1) translateY(0); opacity:1;}
+  .modal-bar{
+    display:flex; align-items:center; justify-content:space-between;
+    padding:0.75rem 1rem; background:#1B1F2C; border-bottom:1px solid #262b3d;
+  }
+  .modal-dots{display:flex; gap:0.4rem;}
+  .modal-close{
+    background:none; border:none; color:#7C8AAE; font-family:'JetBrains Mono',monospace;
+    font-size:0.85rem; cursor:pointer; padding:0.3rem 0.6rem; border-radius:6px;
+  }
+  .modal-close:hover{background:#262b3d; color:#fff;}
+  .modal-body{padding:1.8rem; font-family:'JetBrains Mono',monospace; color:#C7D0E0; font-size:0.88rem;}
+  .modal-body .line{margin-bottom:0.55rem;}
+  .modal-body .prompt{color:var(--green);}
+  .progress-track{
+    width:100%; height:6px; background:#262b3d; border-radius:100px; overflow:hidden; margin:1rem 0 1.3rem;
+  }
+  .progress-fill{
+    height:100%; width:0%; background:linear-gradient(90deg, var(--indigo), var(--green));
+    border-radius:100px; animation:fillbar 1.1s ease forwards;
+  }
+  @keyframes fillbar{ to{width:100%;} }
+  .modal-cta{display:none; gap:0.8rem; margin-top:0.6rem;}
+  .modal-cta.show{display:flex; animation:fadeUp .35s ease;}
+  @keyframes fadeUp{ from{opacity:0; transform:translateY(6px);} to{opacity:1; transform:translateY(0);} }
+
+  @media (max-width:860px){
+    .hero-grid, .about-grid{grid-template-columns:1fr;}
+    nav ul{display:none;}
+  }
+</style>
 </head>
 <body>
 
-<header>
-    <h1>Mouna Ben Rebah</h1>
-    <p>Ingénieure en Informatique (TWIN) | Full-Stack Developer</p>
-</header>
-
 <nav>
+  <div class="nav-inner">
+    <div class="logo"><span class="b">&lt;</span>MBR<span class="b">/&gt;</span></div>
     <ul>
-        <li><a href="#about">À propos</a></li>
-        <li><a href="#projects">Projets</a></li>
-        <li><a href="#experience">Expérience</a></li>
-        <li><a href="#skills">Compétences</a></li>
-        <li><a href="#cv">CV</a></li>
+      <li><a href="#apropos">à propos</a></li>
+      <li><a href="#projets">projets</a></li>
+      <li><a href="#experience">expérience</a></li>
+      <li><a href="#competences">compétences</a></li>
+      <li><a href="#cv">cv</a></li>
     </ul>
+  </div>
 </nav>
 
 <div class="container">
 
-    <!-- À propos -->
-    <section id="about" class="about">
-        <h2>À propos de moi</h2>
-        <p>
-            Ingénieure en informatique diplômée de l'<strong>ESPRIT</strong>, spécialité <strong>TWIN (Technologies du Web et de l'Internet)</strong>, et titulaire d'une licence en Internet des Objets (IoT) de la Faculté des Sciences de Tunis. Forte de quatre stages en entreprise, je maîtrise le développement full-stack de bout en bout : interfaces modernes avec <strong>Angular</strong> et <strong>React</strong>, APIs robustes avec <strong>Spring Boot</strong> et <strong>Node.js</strong>, et intégration de services IA. Passionnée par la création d'applications web performantes et bien architecturées, je contribue activement à des projets à impact social et environnemental.
-        </p>
-    </section>
-
-    <!-- Projets -->
-    <section id="projects">
-        <h2>Mes Projets</h2>
-        <div class="projects-grid">
-
-            <div class="project-card">
-                <h3>SOF Smart Hire <span class="badge">PFE · 2026</span></h3>
-                <div class="content">
-                    <p>Plateforme RH intelligente couvrant tout le cycle de recrutement : analyse IA des CV, quiz techniques anti-triche, gestion multi-rôles et évaluation automatique.</p>
-                    <div class="tech-tags">
-                        <span class="tech-tag">Angular 21</span>
-                        <span class="tech-tag">Spring Boot</span>
-                        <span class="tech-tag">FastAPI</span>
-                        <span class="tech-tag">MySQL</span>
-                        <span class="tech-tag">JWT</span>
-                    </div>
-                    <div class="project-links">
-                        <a href="https://github.com/mouna-mbr/sof-smart-hire" target="_blank">GitHub</a>
-                    </div>
-                </div>
-            </div>
-
-            <div class="project-card">
-                <h3>Ulysse Media <span class="badge">Full-Stack</span></h3>
-                <div class="content">
-                    <p>Plateforme web complète de gestion de services multimédias : devis en ligne, paiements échelonnés Stripe, gestion de projet Kanban, chat temps réel et synchronisation Google Calendar.</p>
-                    <div class="tech-tags">
-                        <span class="tech-tag">React.js</span>
-                        <span class="tech-tag">Node.js</span>
-                        <span class="tech-tag">Express.js</span>
-                        <span class="tech-tag">MySQL</span>
-                        <span class="tech-tag">Socket.IO</span>
-                        <span class="tech-tag">Stripe</span>
-                        <span class="tech-tag">JWT</span>
-                    </div>
-                    <div class="project-links">
-                        <a href="https://github.com/mouna-mbr/Ulysse-Media" target="_blank">GitHub</a>
-                    </div>
-                </div>
-            </div>
-
-            <div class="project-card">
-                <h3>Doctory <span class="badge">Santé</span></h3>
-                <div class="content">
-                    <p>Application de gestion médicale connectant patients et médecins : prise de rendez-vous en ligne, dossiers patients, consultations et suivi médical personnalisé.</p>
-                    <div class="tech-tags">
-                        <span class="tech-tag">React.js</span>
-                        <span class="tech-tag">Node.js</span>
-                        <span class="tech-tag">MySQL</span>
-                        <span class="tech-tag">JWT</span>
-                        <span class="tech-tag">API REST</span>
-                    </div>
-                    <div class="project-links">
-                        <a href="https://github.com/mouna-mbr/Doctory" target="_blank">GitHub</a>
-                    </div>
-                </div>
-            </div>
-
-            <div class="project-card">
-                <h3>SustainaFood</h3>
-                <div class="content">
-                    <p>Plateforme web connectant donateurs et associations pour réduire le gaspillage alimentaire avec IA (vision + ML).</p>
-                    <div class="tech-tags">
-                        <span class="tech-tag">React.js</span>
-                        <span class="tech-tag">Node.js</span>
-                        <span class="tech-tag">MongoDB</span>
-                        <span class="tech-tag">Random Forest</span>
-                        <span class="tech-tag">Computer Vision</span>
-                    </div>
-                    <div class="project-links">
-                        <a href="https://github.com/FouzriChayma/SustainaFood" target="_blank">GitHub</a>
-                    </div>
-                </div>
-            </div>
-
-            <div class="project-card">
-                <h3>MindLens – AI Journaling</h3>
-                <div class="content">
-                    <p>Application de journaling multimodal (texte, audio, images) enrichie par IA pour le bien-être mental.</p>
-                    <div class="tech-tags">
-                        <span class="tech-tag">Django</span>
-                        <span class="tech-tag">PostgreSQL</span>
-                        <span class="tech-tag">HuggingFace</span>
-                        <span class="tech-tag">Whisper</span>
-                        <span class="tech-tag">Vision AI</span>
-                    </div>
-                    <div class="project-links">
-                        <a href="https://github.com/SheCodes-esprit/MindLens" target="_blank">GitHub</a>
-                    </div>
-                </div>
-            </div>
-
-            <div class="project-card">
-                <h3>Waste-2-Product</h3>
-                <div class="content">
-                    <p>Plateforme de transformation des déchets en produits valorisables (économie circulaire).</p>
-                    <div class="tech-tags">
-                        <span class="tech-tag">Laravel</span>
-                        <span class="tech-tag">MySQL</span>
-                        <span class="tech-tag">PHP</span>
-                        <span class="tech-tag">API REST</span>
-                    </div>
-                    <div class="project-links">
-                        <a href="https://github.com/SheCodes-Projects-Esprit/Waste-2-Product" target="_blank">GitHub</a>
-                    </div>
-                </div>
-            </div>
-
-            <div class="project-card">
-                <h3>SemantikVoyage</h3>
-                <div class="content">
-                    <p>API de voyage intelligent basée sur une ontologie sémantique et IA.</p>
-                    <div class="tech-tags">
-                        <span class="tech-tag">Django</span>
-                        <span class="tech-tag">RDF/OWL</span>
-                        <span class="tech-tag">SPARQL</span>
-                        <span class="tech-tag">Fesuki</span>
-                        <span class="tech-tag">Web Sémantique</span>
-                    </div>
-                    <div class="project-links">
-                        <a href="https://github.com/SheCodes-Projects-Esprit/SemantikVoyage-ontology-django" target="_blank">GitHub</a>
-                    </div>
-                </div>
-            </div>
-
+  <!-- HERO -->
+  <header class="hero">
+    <div class="hero-grid">
+      <div>
+        <span class="status-badge"><span class="status-dot"></span>Disponible pour de nouvelles opportunités</span>
+        <h1>Mouna Ben Rebah<br><span class="accent">Développeuse Full-Stack.</span></h1>
+        <p class="subtitle">Ingénieure en informatique (ESPRIT · TWIN), je conçois des applications web claires et robustes — du frontend Angular/React aux APIs Spring Boot, avec une touche d'IA quand ça sert vraiment.</p>
+        <div class="hero-cta">
+          <a href="#projets" class="btn btn-primary">Voir mes projets</a>
+          <button class="btn btn-secondary" id="openCvBtn" type="button">Ouvrir mon CV</button>
         </div>
-    </section>
-
-    <!-- Expérience -->
-    <section id="experience">
-        <h2>Expérience Professionnelle</h2>
-
-        <div class="experience-item">
-            <h3>Stage de Fin d'Études — Développeuse Full-Stack</h3>
-            <div class="company">Sofrecom Tunisie (Groupe Orange)</div>
-            <div class="date">Février 2026 – Juillet 2026 · 6 mois</div>
-            <ul>
-                <li>Conception et développement d'une plateforme RH modulaire (authentification multi-rôles, quiz techniques, analyse CV)</li>
-                <li>Frontend Angular 21 : guards par rôle, intercepteurs JWT, composants partagés réutilisables</li>
-                <li>Backend Spring Boot 3.2 : API REST sécurisée, gestion des permissions via JPA/Hibernate</li>
-                <li>Microservice IA FastAPI : extraction CV, génération quiz, détection contenu généré par IA</li>
-            </ul>
-            <div class="stack-line">Stack : Angular 21 · TypeScript · Tailwind CSS · Spring Boot 3.2 · Java 17 · FastAPI · Python · MySQL · JWT</div>
+      </div>
+      <div class="terminal">
+        <div class="terminal-bar">
+          <span class="terminal-dot" style="background:#F16065"></span>
+          <span class="terminal-dot" style="background:#F5B942"></span>
+          <span class="terminal-dot" style="background:#3EC873"></span>
+          <span class="terminal-filename">profil.sh</span>
         </div>
-
-        <div class="experience-item">
-            <h3>Stagiaire Data Engineering</h3>
-            <div class="company">Sofrecom Tunisie (Groupe Orange)</div>
-            <div class="date">Juillet 2025 – Août 2025</div>
-            <ul>
-                <li>Développement d'une librairie Python réutilisable pour l'orchestration de données massives (<strong>Apache Airflow + Starburst/Trino</strong>)</li>
-                <li>Automatisation de workflows S3 On-Premise → GCP : <strong>réduction de 85% du temps de transfert</strong></li>
-                <li>Gouvernance RGPD via <code>dataguardian-lib</code> + intégration API Collibra</li>
-            </ul>
-            <div class="stack-line">Stack : Python · Apache Airflow · Starburst/Trino · GCP · S3 · SQL</div>
+        <div class="terminal-body">
+          <div class="line"><span class="prompt">mouna@dev</span><span class="path">:~$</span> ./presente-toi</div>
+          <div class="line out">{</div>
+          <div class="line" style="padding-left:1rem;"><span class="key">"role"</span>: <span class="val">"Ingénieure Full-Stack"</span>,</div>
+          <div class="line" style="padding-left:1rem;"><span class="key">"stack"</span>: [<span class="val">"Angular"</span>, <span class="val">"React"</span>, <span class="val">"Spring Boot"</span>, <span class="val">"Node.js"</span>],</div>
+          <div class="line" style="padding-left:1rem;"><span class="key">"stages"</span>: <span class="val">4</span>,</div>
+          <div class="line" style="padding-left:1rem;"><span class="key">"ville"</span>: <span class="val">"Tunis, TN"</span></div>
+          <div class="line out">}</div>
+          <div class="line"><span class="prompt">mouna@dev</span><span class="path">:~$</span> <span class="cursor"></span></div>
         </div>
+      </div>
+    </div>
+  </header>
 
-        <div class="experience-item">
-            <h3>Développeuse .NET / Angular</h3>
-            <div class="company">Société Tunisienne de Banque (STB)</div>
-            <div class="date">Juillet 2024 – Août 2024</div>
-            <ul>
-                <li>Système d'affectation en masse des cartes bancaires</li>
-                <li>Backends : <strong>Spring Boot</strong> + <strong>.NET</strong> · Frontend <strong>Angular</strong> + API RESTful</li>
-            </ul>
-            <div class="stack-line">Stack : Angular · Spring Boot · Java · .NET · MySQL · API RESTful</div>
+  <!-- APROPOS -->
+  <section id="apropos" class="block">
+    <span class="eyebrow">à propos</span>
+    <h2 class="title">Qui suis-je</h2>
+    <div class="about-grid">
+      <div class="about-card">
+        <div class="row"><span>Diplôme</span><span>Ingénieure ESPRIT · TWIN</span></div>
+        <div class="row"><span>Licence</span><span>IoT · Fac. des Sciences Tunis</span></div>
+        <div class="row"><span>Stages</span><span>4 expériences terrain</span></div>
+        <div class="row"><span>Ville</span><span>Tunis, Tunisie</span></div>
+        <div class="row"><span>Contact</span><span>mouna1ben1rebah@gmail.com</span></div>
+      </div>
+      <div class="code-editor">
+        <div class="code-tabs">
+          <div class="code-tab active">MounaBenRebah.js</div>
         </div>
-
-        <div class="experience-item">
-            <h3>Développeuse Full-Stack (PFE Licence)</h3>
-            <div class="company">BEE Coders</div>
-            <div class="date">Janvier 2023 – Juin 2023</div>
-            <ul>
-                <li>Plateforme multiprofiles connectant entreprises, étudiants et coworking</li>
-                <li><strong>Spring Boot</strong> + <strong>Angular</strong> + MySQL, API RESTful</li>
-            </ul>
-            <div class="stack-line">Stack : Spring Boot · Java · Angular · TypeScript · MySQL</div>
+        <div class="code-content">
+          <div class="line-numbers">
+1<br>2<br>3<br>4<br>5<br>6<br>7<br>8<br>9<br>10<br>11<br>12<br>13<br>14<br>15<br>16<br>17
+          </div>
+          <div class="code-lines">
+<span class="cm">// Ingénieure en informatique, spécialité Web & Internet</span><br>
+<span class="kw">class</span> <span class="cls">MounaBenRebah</span> <span class="punc">{</span><br>
+&nbsp;&nbsp;<span class="fn">constructor</span><span class="punc">()</span> <span class="punc">{</span><br>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="kw">this</span><span class="punc">.</span><span class="prop">diplome</span> <span class="punc">=</span> <span class="str">"ESPRIT · TWIN"</span><span class="punc">;</span><br>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="kw">this</span><span class="punc">.</span><span class="prop">licence</span> <span class="punc">=</span> <span class="str">"IoT, Fac. des Sciences de Tunis"</span><span class="punc">;</span><br>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="kw">this</span><span class="punc">.</span><span class="prop">stages</span> <span class="punc">=</span> <span class="num">4</span><span class="punc">;</span><br>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="kw">this</span><span class="punc">.</span><span class="prop">passion</span> <span class="punc">=</span> <span class="str">"construire des apps utiles et bien pensées"</span><span class="punc">;</span><br>
+&nbsp;&nbsp;<span class="punc">}</span><br><br>
+&nbsp;&nbsp;<span class="fn">stackPrincipale</span><span class="punc">()</span> <span class="punc">{</span><br>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="kw">return</span> <span class="punc">[</span><span class="str">"Angular"</span><span class="punc">,</span> <span class="str">"React"</span><span class="punc">,</span> <span class="str">"Spring Boot"</span><span class="punc">,</span> <span class="str">"Node.js"</span><span class="punc">];</span><br>
+&nbsp;&nbsp;<span class="punc">}</span><br><br>
+&nbsp;&nbsp;<span class="fn">aPropos</span><span class="punc">()</span> <span class="punc">{</span><br>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="kw">return</span> <span class="str">"Full-stack de bout en bout, du frontend à l'API, avec une touche d'IA quand elle sert vraiment le produit."</span><span class="punc">;</span><br>
+&nbsp;&nbsp;<span class="punc">}</span><br>
+<span class="punc">}</span>
+          </div>
         </div>
+      </div>
+    </div>
+  </section>
 
-    </section>
+  <!-- PROJETS -->
+  <section id="projets" class="block">
+    <span class="eyebrow">projets</span>
+    <h2 class="title">Mes projets</h2>
+    <div class="projects-grid">
 
-    <!-- Compétences -->
-    <section id="skills">
-        <h2>Compétences Techniques</h2>
-        <div class="skills-grid">
-
-            <div class="skill-category">
-                <h4>Langages</h4>
-                <div class="skill-tags">
-                    <span class="skill-tag">Java</span>
-                    <span class="skill-tag">Python</span>
-                    <span class="skill-tag">JavaScript</span>
-                    <span class="skill-tag">TypeScript</span>
-                    <span class="skill-tag">PHP</span>
-                    <span class="skill-tag">C/C++</span>
-                </div>
-            </div>
-
-            <div class="skill-category">
-                <h4>Frameworks</h4>
-                <div class="skill-tags">
-                    <span class="skill-tag">Spring Boot</span>
-                    <span class="skill-tag">Angular</span>
-                    <span class="skill-tag">React.js</span>
-                    <span class="skill-tag">Node.js</span>
-                    <span class="skill-tag">FastAPI</span>
-                    <span class="skill-tag">Django</span>
-                    <span class="skill-tag">Laravel</span>
-                    <span class="skill-tag">.NET</span>
-                </div>
-            </div>
-
-            <div class="skill-category">
-                <h4>Bases de Données</h4>
-                <div class="skill-tags">
-                    <span class="skill-tag">MySQL</span>
-                    <span class="skill-tag">PostgreSQL</span>
-                    <span class="skill-tag">MongoDB</span>
-                    <span class="skill-tag">H2</span>
-                </div>
-            </div>
-
-            <div class="skill-category">
-                <h4>IA & Data</h4>
-                <div class="skill-tags">
-                    <span class="skill-tag">Machine Learning</span>
-                    <span class="skill-tag">Computer Vision</span>
-                    <span class="skill-tag">NLP</span>
-                    <span class="skill-tag">HuggingFace</span>
-                    <span class="skill-tag">Whisper</span>
-                    <span class="skill-tag">Apache Airflow</span>
-                </div>
-            </div>
-
-            <div class="skill-category">
-                <h4>Outils & Méthodes</h4>
-                <div class="skill-tags">
-                    <span class="skill-tag">Git / GitHub</span>
-                    <span class="skill-tag">REST API</span>
-                    <span class="skill-tag">JWT</span>
-                    <span class="skill-tag">Socket.IO</span>
-                    <span class="skill-tag">Stripe</span>
-                    <span class="skill-tag">Postman</span>
-                    <span class="skill-tag">Figma</span>
-                    <span class="skill-tag">Scrum Agile</span>
-                </div>
-            </div>
-
-            <div class="skill-category">
-                <h4>Web Sémantique</h4>
-                <div class="skill-tags">
-                    <span class="skill-tag">RDF/OWL</span>
-                    <span class="skill-tag">SPARQL</span>
-                    <span class="skill-tag">Ontologies</span>
-                    <span class="skill-tag">Fesuki</span>
-                </div>
-            </div>
-
+      <div class="project-card">
+        <div class="project-top"><span class="dot r"></span><span class="dot y"></span><span class="dot g"></span><span class="project-name">sof-smart-hire</span></div>
+        <div class="project-content">
+          <h3>SOF Smart Hire <span class="badge private">PFE · 2026 · Confidentiel</span></h3>
+          <p>Plateforme RH intelligente couvrant tout le cycle de recrutement : analyse IA des CV, quiz techniques anti-triche, gestion multi-rôles et évaluation automatique.</p>
+          <div class="tech-tags">
+            <span class="tech-tag">Angular 21</span><span class="tech-tag">Spring Boot</span><span class="tech-tag">FastAPI</span><span class="tech-tag">MySQL</span><span class="tech-tag">JWT</span>
+          </div>
+          <div class="project-links"><span class="private-note">Code source privé (projet d'entreprise confidentiel)</span></div>
         </div>
-    </section>
+      </div>
 
-    <!-- CV -->
-    <section id="cv" class="cv">
-        <h2>Mon CV Complet</h2>
-        <p>Découvrez mon parcours détaillé, mes projets académiques et mes certifications.</p>
-        <br>
-        <a href="Mouna-Ben-Rebah-FlowCV-Resume.pdf" download>Télécharger mon CV (PDF)</a>
-    </section>
+      <div class="project-card">
+        <div class="project-top"><span class="dot r"></span><span class="dot y"></span><span class="dot g"></span><span class="project-name">ulysse-media</span></div>
+        <div class="project-content">
+          <h3>Ulysse Media <span class="badge">Full-Stack</span></h3>
+          <p>Plateforme de gestion de services multimédias : devis en ligne, paiements échelonnés Stripe, Kanban, chat temps réel et synchronisation Google Calendar.</p>
+          <div class="tech-tags">
+            <span class="tech-tag">React</span><span class="tech-tag">Node.js</span><span class="tech-tag">Express</span><span class="tech-tag">MySQL</span><span class="tech-tag">Socket.IO</span><span class="tech-tag">Stripe</span>
+          </div>
+          <div class="project-links"><a href="https://github.com/mouna-mbr/Ulysse-Media" target="_blank">github.com/mouna-mbr/Ulysse-Media</a></div>
+        </div>
+      </div>
+
+      <div class="project-card">
+        <div class="project-top"><span class="dot r"></span><span class="dot y"></span><span class="dot g"></span><span class="project-name">doctory</span></div>
+        <div class="project-content">
+          <h3>Doctory <span class="badge">Santé</span></h3>
+          <p>Application de gestion médicale connectant patients et médecins : rendez-vous en ligne, dossiers patients, consultations et suivi personnalisé.</p>
+          <div class="tech-tags">
+            <span class="tech-tag">React</span><span class="tech-tag">Node.js</span><span class="tech-tag">MySQL</span><span class="tech-tag">JWT</span><span class="tech-tag">API REST</span>
+          </div>
+          <div class="project-links"><a href="https://github.com/mouna-mbr/Doctory" target="_blank">github.com/mouna-mbr/Doctory</a></div>
+        </div>
+      </div>
+
+      <div class="project-card">
+        <div class="project-top"><span class="dot r"></span><span class="dot y"></span><span class="dot g"></span><span class="project-name">sustainafood</span></div>
+        <div class="project-content">
+          <h3>SustainaFood <span class="badge">Impact</span></h3>
+          <p>Plateforme connectant donateurs et associations pour réduire le gaspillage alimentaire, avec IA (vision + ML).</p>
+          <div class="tech-tags">
+            <span class="tech-tag">React</span><span class="tech-tag">Node.js</span><span class="tech-tag">MongoDB</span><span class="tech-tag">Random Forest</span><span class="tech-tag">Computer Vision</span>
+          </div>
+          <div class="project-links"><a href="https://github.com/FouzriChayma/SustainaFood" target="_blank">github.com/FouzriChayma/SustainaFood</a></div>
+        </div>
+      </div>
+
+      <div class="project-card">
+        <div class="project-top"><span class="dot r"></span><span class="dot y"></span><span class="dot g"></span><span class="project-name">mindlens</span></div>
+        <div class="project-content">
+          <h3>MindLens <span class="badge">Journal IA</span></h3>
+          <p>Application de journaling multimodal (texte, audio, images) enrichie par IA pour le bien-être mental.</p>
+          <div class="tech-tags">
+            <span class="tech-tag">Django</span><span class="tech-tag">PostgreSQL</span><span class="tech-tag">HuggingFace</span><span class="tech-tag">Whisper</span>
+          </div>
+          <div class="project-links"><a href="https://github.com/SheCodes-esprit/MindLens" target="_blank">github.com/SheCodes-esprit/MindLens</a></div>
+        </div>
+      </div>
+
+      <div class="project-card">
+        <div class="project-top"><span class="dot r"></span><span class="dot y"></span><span class="dot g"></span><span class="project-name">waste-2-product</span></div>
+        <div class="project-content">
+          <h3>Waste-2-Product <span class="badge">Économie circulaire</span></h3>
+          <p>Plateforme de transformation des déchets en produits valorisables.</p>
+          <div class="tech-tags">
+            <span class="tech-tag">Laravel</span><span class="tech-tag">MySQL</span><span class="tech-tag">PHP</span><span class="tech-tag">API REST</span>
+          </div>
+          <div class="project-links"><a href="https://github.com/SheCodes-Projects-Esprit/Waste-2-Product" target="_blank">github.com/.../Waste-2-Product</a></div>
+        </div>
+      </div>
+
+      <div class="project-card">
+        <div class="project-top"><span class="dot r"></span><span class="dot y"></span><span class="dot g"></span><span class="project-name">semantikvoyage</span></div>
+        <div class="project-content">
+          <h3>SemantikVoyage <span class="badge">Web Sémantique</span></h3>
+          <p>API de voyage intelligent basée sur une ontologie sémantique et IA.</p>
+          <div class="tech-tags">
+            <span class="tech-tag">Django</span><span class="tech-tag">RDF/OWL</span><span class="tech-tag">SPARQL</span>
+          </div>
+          <div class="project-links"><a href="https://github.com/SheCodes-Projects-Esprit/SemantikVoyage-ontology-django" target="_blank">github.com/.../SemantikVoyage</a></div>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- EXPERIENCE -->
+  <section id="experience" class="block">
+    <span class="eyebrow">expérience</span>
+    <h2 class="title">Parcours professionnel</h2>
+    <div class="timeline">
+
+      <div class="timeline-item">
+        <span class="commit-hash">a3f1c9e</span><h3>Stage de Fin d'Études — Développeuse Full-Stack</h3>
+        <div class="company">Sofrecom Tunisie (Groupe Orange)</div>
+        <div class="date">Février 2026 – Juillet 2026 · 6 mois</div>
+        <ul>
+          <li>Conception d'une plateforme RH modulaire (authentification multi-rôles, quiz techniques, analyse CV)</li>
+          <li>Frontend Angular 21 : guards par rôle, intercepteurs JWT, composants réutilisables</li>
+          <li>Backend Spring Boot 3.2 : API REST sécurisée, permissions via JPA/Hibernate</li>
+          <li>Microservice IA FastAPI : extraction CV, génération quiz, détection contenu IA</li>
+        </ul>
+        <div class="stack-line">Angular 21 · TypeScript · Tailwind · Spring Boot 3.2 · Java 17 · FastAPI · MySQL · JWT</div>
+      </div>
+
+      <div class="timeline-item">
+        <span class="commit-hash">7d02b41</span><h3>Stagiaire Data Engineering</h3>
+        <div class="company">Sofrecom Tunisie (Groupe Orange)</div>
+        <div class="date">Juillet 2025 – Août 2025</div>
+        <ul>
+          <li>Librairie Python réutilisable pour l'orchestration de données massives (Apache Airflow + Starburst/Trino)</li>
+          <li>Automatisation de workflows S3 On-Premise → GCP : réduction de 85% du temps de transfert</li>
+          <li>Gouvernance RGPD via dataguardian-lib + intégration API Collibra</li>
+        </ul>
+        <div class="stack-line">Python · Apache Airflow · Starburst/Trino · GCP · S3 · SQL</div>
+      </div>
+
+      <div class="timeline-item">
+        <span class="commit-hash">4c88e10</span><h3>Développeuse .NET / Angular</h3>
+        <div class="company">Société Tunisienne de Banque (STB)</div>
+        <div class="date">Juillet 2024 – Août 2024</div>
+        <ul>
+          <li>Système d'affectation en masse des cartes bancaires</li>
+          <li>Backends Spring Boot + .NET · Frontend Angular + API RESTful</li>
+        </ul>
+        <div class="stack-line">Angular · Spring Boot · Java · .NET · MySQL · API REST</div>
+      </div>
+
+      <div class="timeline-item">
+        <span class="commit-hash">1a9f2d7</span><h3>Développeuse Full-Stack (PFE Licence)</h3>
+        <div class="company">BEE Coders</div>
+        <div class="date">Janvier 2023 – Juin 2023</div>
+        <ul>
+          <li>Plateforme multiprofils connectant entreprises, étudiants et coworking</li>
+          <li>Spring Boot + Angular + MySQL, API RESTful</li>
+        </ul>
+        <div class="stack-line">Spring Boot · Java · Angular · TypeScript · MySQL</div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- COMPETENCES -->
+  <section id="competences" class="block">
+    <span class="eyebrow">compétences</span>
+    <h2 class="title">Compétences techniques</h2>
+    <div class="skills-grid">
+
+      <div class="skill-category">
+        <h4>langages</h4>
+        <div class="skill-tags">
+          <span class="skill-tag">Java</span><span class="skill-tag">Python</span><span class="skill-tag">JavaScript</span><span class="skill-tag">TypeScript</span><span class="skill-tag">PHP</span><span class="skill-tag">C/C++</span>
+        </div>
+      </div>
+
+      <div class="skill-category">
+        <h4>frameworks</h4>
+        <div class="skill-tags">
+          <span class="skill-tag">Spring Boot</span><span class="skill-tag">Angular</span><span class="skill-tag">React.js</span><span class="skill-tag">Node.js</span><span class="skill-tag">FastAPI</span><span class="skill-tag">Django</span><span class="skill-tag">Laravel</span><span class="skill-tag">.NET</span>
+        </div>
+      </div>
+
+      <div class="skill-category">
+        <h4>bases de données</h4>
+        <div class="skill-tags">
+          <span class="skill-tag">MySQL</span><span class="skill-tag">PostgreSQL</span><span class="skill-tag">MongoDB</span><span class="skill-tag">H2</span>
+        </div>
+      </div>
+
+      <div class="skill-category">
+        <h4>ia & données</h4>
+        <div class="skill-tags">
+          <span class="skill-tag">Machine Learning</span><span class="skill-tag">Computer Vision</span><span class="skill-tag">NLP</span><span class="skill-tag">HuggingFace</span><span class="skill-tag">Whisper</span><span class="skill-tag">Apache Airflow</span>
+        </div>
+      </div>
+
+      <div class="skill-category">
+        <h4>outils</h4>
+        <div class="skill-tags">
+          <span class="skill-tag">Git / GitHub</span><span class="skill-tag">API REST</span><span class="skill-tag">JWT</span><span class="skill-tag">Socket.IO</span><span class="skill-tag">Stripe</span><span class="skill-tag">Postman</span><span class="skill-tag">Figma</span><span class="skill-tag">Scrum Agile</span>
+        </div>
+      </div>
+
+      <div class="skill-category">
+        <h4>web sémantique</h4>
+        <div class="skill-tags">
+          <span class="skill-tag">RDF/OWL</span><span class="skill-tag">SPARQL</span><span class="skill-tag">Ontologies</span><span class="skill-tag">Fesuki</span>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- CV -->
+  <section id="cv" class="block">
+    <div class="cv-box">
+      <h2 class="title" style="border:none;">Envie de voir le détail complet ?</h2>
+      <p>Parcours complet, projets académiques et certifications, dans un seul PDF.</p>
+      <button class="btn btn-primary" id="openCvBtn2" type="button">Ouvrir mon CV</button>
+    </div>
+  </section>
 
 </div>
 
 <footer>
-    <p>© 2026 Mouna Ben Rebah — Tous droits réservés.</p>
-    <p>mouna1ben1rebah@gmail.com | +216 55 447 395</p>
+  <p>© 2026 Mouna Ben Rebah — Tous droits réservés.</p>
+  <p class="mono">mouna1ben1rebah@gmail.com · +216 55 447 395</p>
 </footer>
+
+<!-- MODAL CV -->
+<div class="modal-overlay" id="cvModal">
+  <div class="modal-panel">
+    <div class="modal-bar">
+      <div class="modal-dots">
+        <span class="terminal-dot" style="background:#F16065"></span>
+        <span class="terminal-dot" style="background:#F5B942"></span>
+        <span class="terminal-dot" style="background:#3EC873"></span>
+      </div>
+      <button class="modal-close" id="closeCvBtn" type="button">fermer ✕</button>
+    </div>
+    <div class="modal-body">
+      <div class="line"><span class="prompt">mouna@dev</span><span class="path">:~$</span> ./ouvrir-cv --format pdf</div>
+      <div class="line" id="modalStatusLine">chargement du document…</div>
+      <div class="progress-track"><div class="progress-fill" id="progressFill"></div></div>
+      <div class="modal-cta" id="modalCta">
+        <a href="MOUNA_BEN_REBAH_CV.pdf" download class="btn btn-primary" style="background:var(--green);">Télécharger le PDF</a>
+        <a href="MOUNA_BEN_REBAH_CV.pdf" target="_blank" class="btn btn-secondary" style="background:transparent; color:#C7D0E0; border-color:#262b3d;">Ouvrir dans un onglet</a>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+  const overlay = document.getElementById('cvModal');
+  const openBtns = [document.getElementById('openCvBtn'), document.getElementById('openCvBtn2')];
+  const closeBtn = document.getElementById('closeCvBtn');
+  const progressFill = document.getElementById('progressFill');
+  const modalCta = document.getElementById('modalCta');
+  const statusLine = document.getElementById('modalStatusLine');
+
+  function openModal(){
+    overlay.classList.add('open');
+    progressFill.style.animation = 'none';
+    modalCta.classList.remove('show');
+    statusLine.textContent = 'chargement du document…';
+    // restart animation
+    void progressFill.offsetWidth;
+    progressFill.style.animation = 'fillbar 1.1s ease forwards';
+    setTimeout(() => {
+      statusLine.textContent = '✓ document prêt';
+      modalCta.classList.add('show');
+    }, 1150);
+  }
+  function closeModal(){
+    overlay.classList.remove('open');
+  }
+  openBtns.forEach(btn => btn && btn.addEventListener('click', openModal));
+  closeBtn.addEventListener('click', closeModal);
+  overlay.addEventListener('click', (e) => { if(e.target === overlay) closeModal(); });
+  document.addEventListener('keydown', (e) => { if(e.key === 'Escape') closeModal(); });
+</script>
 
 </body>
 </html>

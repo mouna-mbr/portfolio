@@ -1,8 +1,9 @@
+
 <!DOCTYPE html>
 <html lang="fr">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
 <title>Mouna Ben Rebah — Développeuse Full-Stack</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
@@ -19,6 +20,8 @@
     --green-light:#E7F8F1;
     --amber:#F5A524;
     --amber-light:#FDF3E0;
+    --sky:#3B82F6;
+    --sky-light:#93C5FD;
     --radius:14px;
     --shadow: 0 1px 2px rgba(18,21,28,0.04), 0 8px 24px rgba(18,21,28,0.05);
     --code-bg:#12151F;
@@ -32,6 +35,7 @@
     color:var(--ink);
     line-height:1.65;
     -webkit-font-smoothing:antialiased;
+    overflow-x:hidden;
   }
   h1,h2,h3{font-family:'Space Grotesk',sans-serif;}
   .mono{font-family:'JetBrains Mono',monospace;}
@@ -80,8 +84,8 @@
   .container{max-width:1120px; margin:0 auto; padding:0 1.5rem;}
 
   /* ---------- Hero ---------- */
-  .hero{padding:5rem 0 4rem;}
-  .hero-grid{display:grid; grid-template-columns:1.1fr 1fr; gap:3rem; align-items:center;}
+  .hero{padding:5rem 0 4rem; position:relative; overflow:hidden;}
+  .hero-grid{display:grid; grid-template-columns:1.1fr 1fr; gap:3rem; align-items:center; position:relative; z-index:1;}
   .status-badge{
     display:inline-flex; align-items:center; gap:0.5rem;
     background:var(--green-light); color:var(--green);
@@ -109,10 +113,115 @@
   .btn-secondary{background:var(--surface); color:var(--ink); border:1px solid var(--border);}
   .btn-secondary:hover{border-color:var(--indigo); color:var(--indigo); transform:translateY(-2px);}
 
+  /* hero 3D canvas layer — anchored to the right (terminal) side so it never sits under the headline */
+  .hero-3d{
+    position:absolute; top:-18%; right:-8%; width:58%; height:135%;
+    z-index:0; pointer-events:none; opacity:0.55;
+    -webkit-mask-image:linear-gradient(to left, black 55%, transparent 100%);
+    mask-image:linear-gradient(to left, black 55%, transparent 100%);
+  }
+  .hero-3d canvas{display:block; width:100%; height:100%;}
+
+  /* edge accents — thin wireframe clusters flanking the hero at its true
+     left/right edges, on every screen size. On narrow layouts they also
+     replace .hero-3d, which would otherwise end up hidden behind the
+     (opaque) terminal card once the layout stacks. */
+  .hero-edge{
+    position:absolute; top:0; bottom:0; width:64px; z-index:0;
+    pointer-events:none; opacity:0.4; overflow:hidden;
+  }
+  .hero-edge canvas{display:block; width:100%; height:100%;}
+  .hero-edge.left{left:0;}
+  .hero-edge.right{right:0;}
+
+  /* subtle animated dev-grid behind the whole hero, very low opacity */
+  .hero-bg-grid{
+    position:absolute; inset:-10% -10%; z-index:0; pointer-events:none;
+    background-image:
+      linear-gradient(rgba(79,70,229,0.055) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(79,70,229,0.055) 1px, transparent 1px);
+    background-size:42px 42px;
+    -webkit-mask-image:radial-gradient(ellipse 70% 60% at 68% 30%, black 0%, transparent 72%);
+    mask-image:radial-gradient(ellipse 70% 60% at 68% 30%, black 0%, transparent 72%);
+    animation:gridDrift 22s linear infinite;
+  }
+  @keyframes gridDrift{ from{background-position:0 0, 0 0;} to{background-position:42px 84px, 42px 84px;} }
+  @media (prefers-reduced-motion: reduce){ .hero-bg-grid{animation:none;} }
+
+  /* floating code-glyph particles drifting up through the hero */
+  .hero-particles{position:absolute; inset:0; z-index:0; pointer-events:none; overflow:hidden;}
+  .hero-particles span{
+    position:absolute; bottom:-10%; font-family:'JetBrains Mono',monospace;
+    color:var(--indigo); opacity:0; font-size:0.85rem;
+    animation:floatUp linear infinite;
+  }
+  @keyframes floatUp{
+    0%{ transform:translateY(0) translateX(0); opacity:0; }
+    8%{ opacity:0.35; }
+    92%{ opacity:0.22; }
+    100%{ transform:translateY(-620px) translateX(var(--drift,20px)); opacity:0; }
+  }
+  @media (prefers-reduced-motion: reduce){ .hero-particles{display:none;} }
+
+  /* ---------- entrance choreography ----------
+     html.pre hides the hero in its authored resting state; a head script adds
+     the class before first paint (behind the opaque preloader) and a WAAPI
+     timeline removes it once the reveal finishes. No JS / reduced motion ⇒
+     .pre is never added and the page simply renders finished. */
+  html.pre nav, html.pre .status-badge, html.pre .subtitle,
+  html.pre .hero-cta>*, html.pre #terminalCard{opacity:0;}
+  html.pre .rise-line{clip-path:inset(100% 0 -14% 0);}
+  html.pre .status-dot{transform:scale(0);}
+  html.pre #terminalCard{transform:scale(.96) translateY(1.1em);}
+  .rise-line{display:inline-block;}
+
+  /* ---------- preloader ---------- */
+  #preloader{
+    position:fixed; inset:0; z-index:5000; background:#0B0D14;
+    display:flex; flex-direction:column; align-items:center; justify-content:center; gap:1.4rem;
+    overflow:hidden;
+    clip-path:circle(150% at 50% 50%);
+    transition:clip-path .85s cubic-bezier(.65,0,.2,1), visibility .85s;
+  }
+  #preloader.hide{
+    clip-path:circle(0% at 50% 50%);
+    visibility:hidden; pointer-events:none;
+  }
+  /* faint moving grid + vignette glow behind the boot sequence */
+  #preloader::before{
+    content:''; position:absolute; inset:-20%; z-index:0;
+    background-image:
+      linear-gradient(rgba(79,70,229,0.14) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(79,70,229,0.14) 1px, transparent 1px);
+    background-size:36px 36px;
+    -webkit-mask-image:radial-gradient(circle at 50% 50%, black 0%, transparent 65%);
+    mask-image:radial-gradient(circle at 50% 50%, black 0%, transparent 65%);
+    animation:gridDrift 14s linear infinite;
+  }
+  #preloader::after{
+    content:''; position:absolute; inset:0; z-index:0;
+    background:radial-gradient(circle at 50% 42%, rgba(59,130,246,0.16), transparent 55%);
+  }
+  .preloader-3d{width:170px; height:170px; position:relative; z-index:1; filter:drop-shadow(0 0 22px rgba(79,70,229,0.35));}
+  .preloader-3d canvas{display:block; width:100%; height:100%;}
+  .preloader-readout{position:relative; z-index:1; display:flex; flex-direction:column; align-items:center; gap:0.9rem;}
+  .preloader-text{font-family:'JetBrains Mono',monospace; font-size:0.9rem; color:#C7D0E0; display:flex; gap:0.4rem; min-height:1.3em;}
+  .preloader-text .prompt{color:var(--sky);}
+  .preloader-text .path{color:#7C8AAE;}
+  .boot-track{width:220px; height:3px; background:#232842; border-radius:100px; overflow:hidden; position:relative;}
+  .boot-fill{display:block; height:100%; width:0%; border-radius:100px; background:linear-gradient(90deg, var(--indigo), var(--sky)); box-shadow:0 0 10px rgba(59,130,246,0.6);}
+  .boot-pct{font-family:'JetBrains Mono',monospace; font-size:0.72rem; color:#5C6584; letter-spacing:0.05em;}
+  @media (prefers-reduced-motion: reduce){
+    #preloader{display:none;}
+    html.pre *{opacity:1 !important; clip-path:none !important; transform:none !important;}
+  }
+
   /* terminal window */
   .terminal{
     background:#14171F; border-radius:var(--radius); overflow:hidden;
     box-shadow:var(--shadow); border:1px solid #23273a;
+    transform-style:preserve-3d; perspective:900px; will-change:transform;
+    transition:transform .25s ease, box-shadow .25s ease;
   }
   .terminal-bar{
     display:flex; align-items:center; gap:0.4rem;
@@ -120,7 +229,7 @@
   }
   .terminal-dot{width:10px; height:10px; border-radius:50%;}
   .terminal-filename{padding:0; margin-left:0.6rem; font-size:0.8rem; font-family:'JetBrains Mono',monospace; color:#7C8AAE;}
-  .terminal-body{padding:1.4rem 1.5rem; font-family:'JetBrains Mono',monospace; font-size:0.88rem; color:#C7D0E0;}
+  .terminal-body{padding:1.4rem 1.5rem; font-family:'JetBrains Mono',monospace; font-size:0.88rem; color:#C7D0E0; min-height:11.5rem;}
   .terminal-body .line{margin-bottom:0.65rem;}
   .terminal-body .prompt{color:var(--green);}
   .terminal-body .path{color:#7C8AAE;}
@@ -141,7 +250,14 @@
   h2.title{font-size:1.9rem; font-weight:700; margin-bottom:2rem; letter-spacing:-0.01em;}
 
   /* ---------- About : code editor ---------- */
-  .about-grid{display:grid; grid-template-columns:0.85fr 1.3fr; gap:2rem; align-items:start;}
+  .about-grid{display:grid; grid-template-columns:0.85fr 1.3fr; gap:2rem; align-items:start; position:relative;}
+  .about-3d{
+    position:absolute; top:-3rem; right:-2rem; width:180px; height:180px;
+    z-index:0; pointer-events:none; opacity:0.5;
+  }
+  .about-3d canvas{display:block; width:100%; height:100%;}
+  .about-card, .code-editor{position:relative; z-index:1;}
+  @media (max-width:860px){ .about-3d{display:none;} }
   .about-card{
     background:var(--surface); border:1px solid var(--border); border-radius:var(--radius);
     padding:1.6rem; box-shadow:var(--shadow);
@@ -177,13 +293,15 @@
   .code-lines .num{color:#F78C6C;}
 
   /* ---------- Projects ---------- */
-  .projects-grid{display:grid; grid-template-columns:repeat(auto-fit, minmax(310px,1fr)); gap:1.4rem;}
+  .projects-grid{display:grid; grid-template-columns:repeat(auto-fit, minmax(310px,1fr)); gap:1.4rem; perspective:1200px;}
   .project-card{
     background:var(--surface); border:1px solid var(--border); border-radius:var(--radius);
-    overflow:hidden; transition:all .25s ease; box-shadow:var(--shadow);
+    overflow:hidden; transition:transform .12s ease-out, border-color .25s ease, box-shadow .25s ease;
+    box-shadow:var(--shadow);
     display:flex; flex-direction:column;
+    transform-style:preserve-3d; will-change:transform;
   }
-  .project-card:hover{transform:translateY(-4px); border-color:var(--indigo);}
+  .project-card:hover{border-color:var(--indigo); box-shadow:0 20px 40px rgba(79,70,229,0.16);}
   .project-top{
     display:flex; align-items:center; gap:0.4rem; padding:0.7rem 1rem;
     background:#F4F5F8; border-bottom:1px solid var(--border);
@@ -218,13 +336,33 @@
   .project-links .private-note::before{content:'🔒';}
 
   /* ---------- Experience : git log style ---------- */
-  .timeline{position:relative; padding-left:2.2rem;}
+  #experience{position:relative;}
+  .exp-3d{
+    position:absolute; top:0; right:-2rem; width:280px; height:100%;
+    z-index:0; pointer-events:none; opacity:0.35;
+  }
+  .exp-3d canvas{display:block; width:100%; height:100%;}
+  @media (max-width:1000px){ .exp-3d{display:none;} }
+
+  .timeline{position:relative; padding-left:2.2rem; z-index:1;}
   .timeline::before{content:''; position:absolute; left:5px; top:6px; bottom:6px; width:2px; background:var(--border);}
-  .timeline-item{position:relative; margin-bottom:2.4rem;}
+  .timeline-item{
+    position:relative; margin-bottom:2.4rem;
+    opacity:0; transform:perspective(800px) rotateX(-10deg) translateY(22px);
+    transform-origin:left center;
+    transition:opacity .6s ease, transform .6s cubic-bezier(.2,.8,.2,1);
+  }
+  .timeline-item.in-view{opacity:1; transform:none;}
   .timeline-item:last-child{margin-bottom:0;}
   .timeline-item::before{
     content:''; position:absolute; left:-2.2rem; top:5px; width:12px; height:12px; border-radius:50%;
     background:var(--surface); border:3px solid var(--indigo);
+    transition:transform .4s ease, border-color .4s ease;
+  }
+  .timeline-item.in-view::before{ animation:dotPop .5s ease; }
+  @keyframes dotPop{ 0%{transform:scale(0) rotate(0deg);} 60%{transform:scale(1.4) rotate(200deg);} 100%{transform:scale(1) rotate(360deg);} }
+  @media (prefers-reduced-motion: reduce){
+    .timeline-item{opacity:1; transform:none;}
   }
   .commit-hash{
     font-family:'JetBrains Mono',monospace; font-size:0.78rem; color:var(--amber);
@@ -245,11 +383,13 @@
   }
 
   /* ---------- Skills ---------- */
-  .skills-grid{display:grid; grid-template-columns:repeat(auto-fit, minmax(240px,1fr)); gap:1.5rem;}
+  .skills-grid{display:grid; grid-template-columns:repeat(auto-fit, minmax(240px,1fr)); gap:1.5rem; perspective:1000px;}
   .skill-category{
     background:var(--surface); border:1px solid var(--border); border-radius:var(--radius);
     padding:1.3rem; box-shadow:var(--shadow);
+    transition:transform .12s ease-out, box-shadow .25s ease; transform-style:preserve-3d; will-change:transform;
   }
+  .skill-category:hover{box-shadow:0 16px 32px rgba(18,21,28,0.08);}
   .skill-category h4{
     font-family:'JetBrains Mono',monospace; font-size:0.85rem; color:var(--ink);
     margin-bottom:0.9rem;
@@ -326,10 +466,40 @@
   @media (max-width:860px){
     .hero-grid, .about-grid{grid-template-columns:1fr;}
     nav ul{display:none;}
+    /* the stacked layout puts the (opaque) terminal card right under the
+       3D cluster, hiding it — swap to two thin accents pinned at the true
+       left/right screen edges instead, outside the readable column */
+    .hero-3d{display:none;}
+    .hero{overflow:visible;}
+    .hero-edge{width:56px; opacity:0.45;}
+    .hero-edge.left{left:-1rem;}
+    .hero-edge.right{right:-1rem;}
+  }
+
+  @media (prefers-reduced-motion: reduce){
+    .hero-3d{display:none;}
   }
 </style>
+<script>
+(function(){
+  var d = document.documentElement;
+  if(!('animate' in Element.prototype)) return;
+  if(window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+  d.classList.add('pre');
+  setTimeout(function(){ d.classList.remove('pre'); }, 4500); // self-heal safety net
+})();
+</script>
 </head>
 <body>
+
+<div id="preloader">
+  <div class="preloader-3d" id="preloaderCanvas"></div>
+  <div class="preloader-readout">
+    <div class="preloader-text mono"><span class="prompt">system</span><span class="path">:~$</span> <span id="preloaderStatus"></span><span class="cursor"></span></div>
+    <div class="boot-track"><i class="boot-fill" id="bootFill"></i></div>
+    <div class="boot-pct mono" id="bootPct">0%</div>
+  </div>
+</div>
 
 <nav>
   <div class="nav-inner">
@@ -351,24 +521,29 @@
 
   <!-- HERO -->
   <header class="hero">
+    <div class="hero-bg-grid" aria-hidden="true"></div>
+    <div class="hero-particles" id="heroParticles" aria-hidden="true"></div>
+    <div class="hero-3d" id="hero3d"></div>
+    <div class="hero-edge left" id="hero3dLeft" aria-hidden="true"></div>
+    <div class="hero-edge right" id="hero3dRight" aria-hidden="true"></div>
     <div class="hero-grid">
-      <div>
+      <div class="hero-copy">
         <span class="status-badge"><span class="status-dot"></span><span data-i18n="hero.badge">Disponible pour de nouvelles opportunités</span></span>
-        <h1 data-i18n-html="hero.h1">Mouna Ben Rebah<br><span class="accent">Développeuse Full-Stack.</span></h1>
+        <h1 data-i18n-html="hero.h1"><span class="rise-line">Mouna Ben Rebah</span><br><span class="accent rise-line">Développeuse Full-Stack.</span></h1>
         <p class="subtitle" data-i18n="hero.subtitle">Ingénieure en informatique (ESPRIT · TWIN), je conçois des applications web claires et robustes — du frontend Angular/React aux APIs Spring Boot, avec une touche d'IA quand ça sert vraiment.</p>
         <div class="hero-cta">
           <a href="#projets" class="btn btn-primary" data-i18n="cta.projects">Voir mes projets</a>
           <button class="btn btn-secondary" id="openCvBtn" type="button" data-i18n="cta.resume">Ouvrir mon CV</button>
         </div>
       </div>
-      <div class="terminal">
+      <div class="terminal" id="terminalCard">
         <div class="terminal-bar">
           <span class="terminal-dot" style="background:#F16065"></span>
           <span class="terminal-dot" style="background:#F5B942"></span>
           <span class="terminal-dot" style="background:#3EC873"></span>
           <span class="terminal-filename" data-i18n="terminal.filename">profil.sh</span>
         </div>
-        <div class="terminal-body" data-i18n-html="terminal.body">
+        <div class="terminal-body" id="terminalBody" data-i18n-html="terminal.body">
           <div class="line"><span class="prompt">mouna@dev</span><span class="path">:~$</span> ./presente-toi</div>
           <div class="line out">{</div>
           <div class="line" style="padding-left:1rem;"><span class="key">"role"</span>: <span class="val">"Ingénieure Full-Stack"</span>,</div>
@@ -387,6 +562,7 @@
     <span class="eyebrow" data-i18n="about.eyebrow">à propos</span>
     <h2 class="title" data-i18n="about.title">Qui suis-je</h2>
     <div class="about-grid">
+      <div class="about-3d" id="about3d"></div>
       <div class="about-card" data-i18n-html="about.card">
         <div class="row"><span>Diplôme</span><span>Ingénieure ESPRIT · TWIN</span></div>
         <div class="row"><span>Licence</span><span>IoT · Fac. des Sciences Tunis</span></div>
@@ -521,6 +697,7 @@
   <section id="experience" class="block">
     <span class="eyebrow" data-i18n="experience.eyebrow">expérience</span>
     <h2 class="title" data-i18n="experience.title">Parcours professionnel</h2>
+    <div class="exp-3d" id="exp3d"></div>
     <div class="timeline" data-i18n-html="experience.timeline">
 
       <div class="timeline-item">
@@ -663,6 +840,7 @@
   </div>
 </div>
 
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
 <script>
   const LANG = {
     fr: {
@@ -673,7 +851,7 @@
       'nav.skills': "compétences",
       'nav.cv': "cv",
       'hero.badge': "Disponible pour de nouvelles opportunités",
-      'hero.h1': `Mouna Ben Rebah<br><span class="accent">Développeuse Full-Stack.</span>`,
+      'hero.h1': `<span class="rise-line">Mouna Ben Rebah</span><br><span class="accent rise-line">Développeuse Full-Stack.</span>`,
       'hero.subtitle': "Ingénieure en informatique (ESPRIT · TWIN), je conçois des applications web claires et robustes — du frontend Angular/React aux APIs Spring Boot, avec une touche d'IA quand ça sert vraiment.",
       'cta.projects': "Voir mes projets",
       'cta.resume': "Ouvrir mon CV",
@@ -900,7 +1078,7 @@
       'nav.skills': "skills",
       'nav.cv': "resume",
       'hero.badge': "Open to new opportunities",
-      'hero.h1': `Mouna Ben Rebah<br><span class="accent">Full-Stack Developer.</span>`,
+      'hero.h1': `<span class="rise-line">Mouna Ben Rebah</span><br><span class="accent rise-line">Full-Stack Developer.</span>`,
       'hero.subtitle': "Computer engineer (ESPRIT · TWIN), I build clean, robust web applications — from Angular/React frontends to Spring Boot APIs, with a touch of AI when it genuinely adds value.",
       'cta.projects': "View my projects",
       'cta.resume': "Open my resume",
@@ -1138,6 +1316,10 @@
       if (LANG[lang][key] !== undefined) el.innerHTML = LANG[lang][key];
     });
 
+    // the timeline's .timeline-item nodes were just replaced — they start
+    // hidden (opacity:0) until observed, so re-arm the reveal for the new ones
+    if (typeof initTimelineReveal === 'function') initTimelineReveal();
+
     document.querySelectorAll('[data-cv-fr]').forEach(el => {
       el.setAttribute('href', lang === 'fr' ? el.getAttribute('data-cv-fr') : el.getAttribute('data-cv-en'));
     });
@@ -1177,6 +1359,388 @@
   closeBtn.addEventListener('click', closeModal);
   overlay.addEventListener('click', (e) => { if(e.target === overlay) closeModal(); });
   document.addEventListener('keydown', (e) => { if(e.key === 'Escape') closeModal(); });
+
+  /* ================= reusable 3D wireframe scene factory ================= */
+  const REDUCE_MOTION = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const COLORS3D = { indigo: 0x4F46E5, green: 0x0EA875, amber: 0xF5A524, sky: 0x3B82F6, skyLight: 0x93C5FD };
+  const activeScenes = [];
+
+  function create3DScene(mountId, { shapes: shapeDefs, cameraZ = 13, parallax = false, spin = false }){
+    const mount = document.getElementById(mountId);
+    if (!mount || REDUCE_MOTION || typeof THREE === 'undefined') return null;
+
+    let width = mount.clientWidth || 1, height = mount.clientHeight || 1;
+    const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
+    renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 2));
+    renderer.setSize(width, height);
+    mount.appendChild(renderer.domElement);
+
+    const scene = new THREE.Scene();
+    const camera = new THREE.PerspectiveCamera(45, width / height, 0.1, 100);
+    camera.position.set(0, 0, cameraZ);
+
+    const group = new THREE.Group();
+    scene.add(group);
+
+    const shapes = shapeDefs.map(({ geo, color, x, y, z, scale }) => {
+      const mat = new THREE.MeshBasicMaterial({ color: COLORS3D[color] || color, wireframe: true, transparent: true, opacity: 0.55 });
+      const mesh = new THREE.Mesh(geo, mat);
+      mesh.position.set(x, y, z);
+      mesh.scale.setScalar(scale);
+      mesh.userData.speed = { x: (Math.random()-0.5)*0.006, y: (Math.random()-0.5)*0.008 };
+      mesh.userData.float = { phase: Math.random()*Math.PI*2, speed: 0.4 + Math.random()*0.3 };
+      group.add(mesh);
+      return mesh;
+    });
+
+    let mouseX = 0, mouseY = 0;
+    if (parallax){
+      window.addEventListener('mousemove', (e) => {
+        mouseX = (e.clientX / window.innerWidth - 0.5);
+        mouseY = (e.clientY / window.innerHeight - 0.5);
+      });
+    }
+
+    const clock = new THREE.Clock();
+    let rafId, paused = false;
+    function animate(){
+      rafId = requestAnimationFrame(animate);
+      const t = clock.getElapsedTime();
+      shapes.forEach(mesh => {
+        mesh.rotation.x += mesh.userData.speed.x;
+        mesh.rotation.y += mesh.userData.speed.y;
+        mesh.position.y += Math.sin(t * mesh.userData.float.speed + mesh.userData.float.phase) * 0.0025;
+      });
+      if (parallax){
+        group.rotation.y += (mouseX * 0.4 - group.rotation.y) * 0.02;
+        group.rotation.x += (-mouseY * 0.25 - group.rotation.x) * 0.02;
+      } else if (spin){
+        group.rotation.y += 0.004;
+      }
+      renderer.render(scene, camera);
+    }
+    animate();
+
+    function onResize(){
+      width = mount.clientWidth; height = mount.clientHeight;
+      if (!width || !height) return;
+      camera.aspect = width / height;
+      camera.updateProjectionMatrix();
+      renderer.setSize(width, height);
+    }
+    window.addEventListener('resize', onResize);
+
+    const controller = {
+      pause(){ if(!paused){ cancelAnimationFrame(rafId); paused = true; } },
+      resume(){ if(paused){ paused = false; animate(); } },
+      dispose(){ cancelAnimationFrame(rafId); renderer.dispose(); mount.innerHTML=''; }
+    };
+    activeScenes.push(controller);
+    return controller;
+  }
+
+  document.addEventListener('visibilitychange', () => {
+    activeScenes.forEach(s => document.hidden ? s.pause() : s.resume());
+  });
+
+  /* ---- preloader: nested wireframe cluster (icosa + octa + torus ring) counter-spinning ---- */
+  const preloaderScene = create3DScene('preloaderCanvas', {
+    cameraZ: 4.8, spin: true,
+    shapes: [
+      { geo: new THREE.IcosahedronGeometry(1.15, 0), color: 'sky', x: 0, y: 0, z: 0, scale: 1 },
+      { geo: new THREE.OctahedronGeometry(0.55, 0), color: 'indigo', x: 0, y: 0, z: 0, scale: 1 },
+      { geo: new THREE.TorusGeometry(1.55, 0.03, 8, 48), color: 'skyLight', x: 0, y: 0, z: 0, scale: 1 },
+    ]
+  });
+
+  /* ---- preloader boot sequence: typewriter log lines + live percentage ---- */
+  const preloaderEl = document.getElementById('preloader');
+  const preloaderStatus = document.getElementById('preloaderStatus');
+  const bootFill = document.getElementById('bootFill');
+  const bootPct = document.getElementById('bootPct');
+
+  const BOOT_LINES = {
+    fr: ['initialisation de l\u2019interface…', 'compilation des composants…', 'connexion à l\u2019API…', 'chargement du profil…', 'prêt ✓'],
+    en: ['booting interface…', 'compiling components…', 'connecting to API…', 'loading profile…', 'ready ✓']
+  };
+
+  let bootFinished = false;
+  let bootRAF = null;
+
+  function typeLine(text, onDone){
+    if (!preloaderStatus) { onDone && onDone(); return; }
+    preloaderStatus.textContent = '';
+    let i = 0;
+    const step = () => {
+      if (bootFinished) return;
+      if (i <= text.length){
+        preloaderStatus.textContent = text.slice(0, i);
+        i++;
+        setTimeout(step, 16 + Math.random() * 22);
+      } else {
+        onDone && onDone();
+      }
+    };
+    step();
+  }
+
+  function runBootSequence(){
+    const lines = BOOT_LINES[currentLang] || BOOT_LINES.fr;
+    let idx = 0;
+    let pct = 0;
+    const total = lines.length;
+    const targetDuration = 2200; // ms, matched to preloader min-display time
+    const perLine = targetDuration / total;
+
+    // animate the percentage counter smoothly alongside the typed lines
+    const pctStart = performance.now();
+    function pctTick(now){
+      if (bootFinished) return;
+      const elapsed = now - pctStart;
+      const p = Math.min(99, Math.round((elapsed / targetDuration) * 100));
+      pct = p;
+      if (bootPct) bootPct.textContent = p + '%';
+      if (bootFill) bootFill.style.width = p + '%';
+      if (elapsed < targetDuration) bootRAF = requestAnimationFrame(pctTick);
+    }
+    bootRAF = requestAnimationFrame(pctTick);
+
+    function next(){
+      if (bootFinished || idx >= lines.length) return;
+      typeLine(lines[idx], () => {
+        idx++;
+        if (idx < lines.length) setTimeout(next, perLine * 0.35);
+      });
+    }
+    next();
+  }
+
+  if (!REDUCE_MOTION){
+    runBootSequence();
+  }
+
+  function finishBoot(){
+    if (bootFinished) return;
+    bootFinished = true;
+    if (bootRAF) cancelAnimationFrame(bootRAF);
+    if (bootFill) bootFill.style.width = '100%';
+    if (bootPct) bootPct.textContent = '100%';
+    if (preloaderStatus) preloaderStatus.textContent = (BOOT_LINES[currentLang] || BOOT_LINES.fr)[4];
+    setTimeout(() => {
+      if (preloaderEl) preloaderEl.classList.add('hide');
+      document.body.classList.add('loaded');
+      if (preloaderScene) setTimeout(() => preloaderScene.dispose(), 900);
+      heroReveal();
+    }, 220);
+  }
+  if (REDUCE_MOTION){
+    document.body.classList.add('loaded');
+    if (preloaderEl) preloaderEl.style.display = 'none';
+    document.documentElement.classList.remove('pre');
+  } else {
+    window.addEventListener('load', () => setTimeout(finishBoot, 1400));
+    setTimeout(finishBoot, 3200); // safety net so the app is never stuck behind the preloader
+  }
+
+  /* ---- hero: cluster of wireframe shapes anchored behind the terminal ---- */
+  create3DScene('hero3d', {
+    parallax: true,
+    shapes: [
+      { geo: new THREE.IcosahedronGeometry(1.5, 0), color: 'indigo', x: 1.6, y: 1.1, z: -1, scale: 1 },
+      { geo: new THREE.TorusGeometry(1.0, 0.3, 8, 40), color: 'green', x: -0.6, y: -1.2, z: -2, scale: 1 },
+      { geo: new THREE.OctahedronGeometry(1.0, 0), color: 'amber', x: 2.2, y: -2.0, z: -3, scale: 0.9 },
+      { geo: new THREE.TetrahedronGeometry(0.8, 0), color: 'indigo', x: 0.4, y: 2.3, z: -2.5, scale: 0.8 },
+      { geo: new THREE.TorusKnotGeometry(0.55, 0.16, 80, 10), color: 'green', x: -1.9, y: 0.3, z: -3.2, scale: 0.75 },
+    ]
+  });
+
+  /* ---- edge accents: two thin wireframe clusters pinned at the true left/
+     right edges of the hero, on every screen size (on narrow layouts they
+     also replace .hero-3d, which would otherwise hide behind the terminal
+     card once the layout stacks). ---- */
+  create3DScene('hero3dLeft', {
+    spin: true, cameraZ: 6,
+    shapes: [
+      { geo: new THREE.IcosahedronGeometry(0.9, 0), color: 'indigo', x: 0, y: 0.4, z: 0, scale: 1 },
+      { geo: new THREE.TetrahedronGeometry(0.55, 0), color: 'green', x: 0, y: -1.4, z: -1, scale: 0.9 },
+    ]
+  });
+  create3DScene('hero3dRight', {
+    spin: true, cameraZ: 6,
+    shapes: [
+      { geo: new THREE.OctahedronGeometry(0.85, 0), color: 'amber', x: 0, y: -0.5, z: 0, scale: 1 },
+      { geo: new THREE.TorusGeometry(0.55, 0.15, 8, 30), color: 'indigo', x: 0, y: 1.5, z: -1, scale: 0.9 },
+    ]
+  });
+
+  /* ---- floating code-glyph particles rising through the hero ---- */
+  (function initHeroParticles(){
+    const host = document.getElementById('heroParticles');
+    if (!host || REDUCE_MOTION) return;
+    const glyphs = ['</>', '{ }', '=>', '01', '[]', 'fn', '<div>', '&&', '::', '#!'];
+    const count = window.innerWidth < 860 ? 8 : 16;
+    for (let i = 0; i < count; i++){
+      const el = document.createElement('span');
+      el.textContent = glyphs[i % glyphs.length];
+      el.style.left = (Math.random() * 100) + '%';
+      el.style.setProperty('--drift', (Math.random() * 60 - 30) + 'px');
+      el.style.fontSize = (0.7 + Math.random() * 0.6) + 'rem';
+      const dur = 14 + Math.random() * 12;
+      el.style.animationDuration = dur + 's';
+      el.style.animationDelay = (-Math.random() * dur) + 's';
+      host.appendChild(el);
+    }
+  })();
+
+  /* ---- about: one quiet rotating shape, echoing the code editor's brackets ---- */
+  create3DScene('about3d', {
+    spin: true, cameraZ: 5,
+    shapes: [{ geo: new THREE.TorusKnotGeometry(0.7, 0.22, 90, 12), color: 'indigo', x: 0, y: 0, z: 0, scale: 1 }]
+  });
+
+  /* ---- experience: two shapes drifting behind the timeline, like commits floating by ---- */
+  create3DScene('exp3d', {
+    cameraZ: 9,
+    shapes: [
+      { geo: new THREE.OctahedronGeometry(0.9, 0), color: 'green', x: 0, y: 2, z: -1, scale: 1 },
+      { geo: new THREE.IcosahedronGeometry(0.6, 0), color: 'amber', x: 0.6, y: -2.2, z: -2, scale: 0.9 },
+    ]
+  });
+
+  /* ================= scroll reveal for the timeline (3D flip-in) =================
+     Exposed as a named function (not an IIFE) because applyLang() replaces the
+     timeline's innerHTML on every language switch — the fresh .timeline-item
+     nodes were never observed, so without re-running this they'd stay stuck
+     at their default opacity:0 and the whole section would look empty. */
+  function initTimelineReveal(){
+    const items = document.querySelectorAll('.timeline-item');
+    if (!items.length) return;
+    if (REDUCE_MOTION || typeof IntersectionObserver === 'undefined'){
+      items.forEach(el => el.classList.add('in-view'));
+      return;
+    }
+    items.forEach((el, i) => { el.style.transitionDelay = (i % 4) * 0.08 + 's'; });
+    const io = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting){ entry.target.classList.add('in-view'); io.unobserve(entry.target); }
+      });
+    }, { threshold: 0.2, rootMargin: '0px 0px -60px 0px' });
+    items.forEach(el => io.observe(el));
+  }
+  initTimelineReveal();
+
+  /* ================= hero entrance timeline (WAAPI) =================
+     Runs once, right after the preloader hides. Four behaviours, styled after
+     the portfolio's own terminal/glass language: a masked "rise" for the
+     headline, a quiet "lift" for supporting copy, a "settle" for the
+     terminal card, and a small "accent" pop for the status dot. Once the
+     terminal card has settled, its JSON body types itself out live. */
+  function heroReveal(){
+    const root = document.documentElement;
+    if (REDUCE_MOTION || !('animate' in Element.prototype)){ root.classList.remove('pre'); typeTerminalBody(); return; }
+
+    const EXPO = 'cubic-bezier(.16,1,.3,1)';
+    const SOFT = 'cubic-bezier(.22,.7,.25,1)';
+    const GLASS = 'cubic-bezier(.2,.75,.28,1)';
+    const running = [];
+
+    function rise(el, delay, dur = 900){
+      if (!el) return;
+      running.push(el.animate([
+        { clipPath: 'inset(100% 0 -14% 0)', transform: 'translateY(.16em)' },
+        { clipPath: 'inset(-18% 0 -14% 0)', transform: 'translateY(0)' },
+      ], { duration: dur, delay, easing: EXPO, fill: 'both' }));
+    }
+    function lift(el, delay, dur = 560, dist = '.7em'){
+      if (!el) return;
+      running.push(el.animate([
+        { opacity: 0, transform: `translateY(${dist})` },
+        { opacity: 1, transform: 'translateY(0)' },
+      ], { duration: dur, delay, easing: SOFT, fill: 'both' }));
+    }
+    function settle(el, delay, dur = 780, from = .96, dist = '1.1em'){
+      if (!el) return;
+      running.push(el.animate([
+        { opacity: 0, transform: `scale(${from}) translateY(${dist})` },
+        { opacity: 1, transform: 'scale(1) translateY(0)' },
+      ], { duration: dur, delay, easing: GLASS, fill: 'both' }));
+    }
+    function accent(el, delay, dur = 520){
+      if (!el) return;
+      running.push(el.animate([{ transform: 'scale(0)' }, { transform: 'scale(1)' }],
+        { duration: dur, delay, easing: EXPO, fill: 'both' }));
+    }
+
+    lift(document.querySelector('nav'), 0, 520, '.5em');
+    const lines = document.querySelectorAll('h1 .rise-line');
+    rise(lines[0], 140, 900);
+    rise(lines[1], 260, 900);
+    lift(document.querySelector('.status-badge'), 60, 520, '.6em');
+    accent(document.querySelector('.status-dot'), 360, 420);
+    lift(document.querySelector('.subtitle'), 400, 560, '.7em');
+    document.querySelectorAll('.hero-cta > *').forEach((el, i) => lift(el, 480 + i * 80, 520, '.6em'));
+    settle(document.getElementById('terminalCard'), 380, 820, .96, '1.2em');
+
+    Promise.all(running.map(a => a.finished.catch(() => {}))).then(() => {
+      root.classList.remove('pre');
+      running.forEach(a => a.cancel());
+      running.length = 0;
+      typeTerminalBody();
+    });
+  }
+
+  /* ---- terminal card: retype its JSON body live, once, right after entrance ---- */
+  let terminalTyped = false;
+  function typeTerminalBody(){
+    if (terminalTyped) return;
+    terminalTyped = true;
+    const body = document.getElementById('terminalBody');
+    if (!body || REDUCE_MOTION) return;
+    const finalHTML = body.innerHTML;
+    const lineEls = Array.from(body.querySelectorAll('.line'));
+    if (!lineEls.length) return;
+
+    // capture each line's target HTML, then clear the visible text (keep structure hidden)
+    const targets = lineEls.map(el => el.innerHTML);
+    lineEls.forEach(el => { el.style.visibility = 'hidden'; });
+
+    let i = 0;
+    function revealNext(){
+      if (i >= lineEls.length) return;
+      const el = lineEls[i];
+      el.style.visibility = 'visible';
+      el.style.opacity = '0';
+      el.animate([{ opacity: 0, transform: 'translateY(.25em)' }, { opacity: 1, transform: 'translateY(0)' }],
+        { duration: 260, easing: 'ease-out', fill: 'forwards' });
+      i++;
+      setTimeout(revealNext, 130);
+    }
+    revealNext();
+  }
+
+  /* ================= 3D tilt on hover (cards + terminal) ================= */
+  (function initTilt(){
+    const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    if (reduceMotion) return;
+    if (window.matchMedia('(hover: none)').matches) return; // skip on touch devices
+
+    const tiltTargets = document.querySelectorAll('.project-card, .skill-category, #terminalCard');
+
+    tiltTargets.forEach(el => {
+      const maxTilt = el.id === 'terminalCard' ? 6 : 8;
+      el.addEventListener('mousemove', (e) => {
+        const rect = el.getBoundingClientRect();
+        const px = (e.clientX - rect.left) / rect.width;
+        const py = (e.clientY - rect.top) / rect.height;
+        const rotY = (px - 0.5) * maxTilt * 2;
+        const rotX = (0.5 - py) * maxTilt * 2;
+        el.style.transform = `perspective(900px) rotateX(${rotX}deg) rotateY(${rotY}deg) translateY(-2px)`;
+      });
+      el.addEventListener('mouseleave', () => {
+        el.style.transform = 'perspective(900px) rotateX(0deg) rotateY(0deg) translateY(0)';
+      });
+    });
+  })();
 </script>
 
 </body>
